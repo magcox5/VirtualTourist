@@ -63,7 +63,7 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
         super.viewWillDisappear(animated)
         
         // Get the pin locations to populate the map
-        
+        // TODO:  
         //        OnTheMapClient.sharedInstance().getStudentLocations(studentLocations: studentLocations, completionHandlerForStudentLocations:
         //                { (success, studentLocations, errorString) in
         //                    if success {
