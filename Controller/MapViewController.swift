@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import CoreData
 
 class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecognizerDelegate  {
     
@@ -57,29 +58,47 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
         mapView.setRegion(mapRegion, animated: true)
         print("Current span is: \(mapView.region.span)")
         print("Current center is: \(mapView.region.center)")
+        
+        // Set the title
+        title = "Virtual Tourist"
+        
+        // Get the stack
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let stack = delegate.stack
+        
+        // Create a fetchrequest
+        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
+        //fr.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
+        //                      NSSortDescriptor(key: "creationDate", ascending: false)]
+        
+        // Create the FetchedResultsController
+        var fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // Get the pin locations to populate the map
-        // TODO:  
-        //        OnTheMapClient.sharedInstance().getStudentLocations(studentLocations: studentLocations, completionHandlerForStudentLocations:
-        //                { (success, studentLocations, errorString) in
-        //                    if success {
-        //                        // Switch to Main Queue to display pins on map
-        //                        DispatchQueue.main.async {
-        //                            self.displayStudentLocations()
-        //                        }
-        //                    }else {
-        //                        self.displayError(errorString: errorString!)
-        //                    }
-        //            })
+        // Display the pin locations on the map
+        displayPinLocations()
+        
+//        OnTheMapClient.sharedInstance().getStudentLocations(studentLocations: studentLocations, completionHandlerForStudentLocations:
+//            { (success, studentLocations, errorString) in
+//                if success {
+//                    // Switch to Main Queue to display pins on map
+//                    DispatchQueue.main.async {
+//                        self.displayStudentLocations()
+//                    }
+//                }else {
+//                    self.displayError(errorString: errorString!)
+//                }
+//        })
     }
-    
+
     private func displayPinLocations() {
-        //            var annotations = [MKPointAnnotation]()
-        //            let locations = self.studentLocations.thisStudentArray
+        var annotations = [MKPointAnnotation]()
+        // let locations =
+        
         //            for student in locations {
         //                // Notice that the float values are being used to create CLLocationDegree values.
         //                // This is a version of the Double type.

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-// MARK: - CoreDataCollectionViewController: UICollectionViewController
+// MARK: - CoreDataCollectionViewController: UIViewController
 
 class CoreDataCollectionViewController: UICollectionViewController {
     
@@ -74,29 +74,29 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, titleForHeaderInSection section: Int) -> String? {
-        if let fc = fetchedResultsController {
-            return fc.sections![section].name
-        } else {
-            return nil
-        }
-    }
+//    override func collectionView(_ collectionView: UICollectionView, titleForHeaderInSection section: Int) -> String? {
+//        if let fc = fetchedResultsController {
+//            return fc.sections![section].name
+//        } else {
+//            return nil
+//        }
+//    }
     
-    override func collectionView(_ collectionView: UICollectionView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        if let fc = fetchedResultsController {
-            return fc.section(forSectionIndexTitle: title, at: index)
-        } else {
-            return 0
-        }
-    }
+//    override func collectionView(_ collectionView: UICollectionView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+//        if let fc = fetchedResultsController {
+//            return fc.section(forSectionIndexTitle: title, at: index)
+//        } else {
+//            return 0
+//        }
+//    }
     
-    override func sectionIndexTitles(for collectionView: UICollectionView) -> [String]? {
-        if let fc = fetchedResultsController {
-            return fc.sectionIndexTitles
-        } else {
-            return nil
-        }
-    }
+//    override func sectionIndexTitles(for collectionView: UICollectionView) -> [String]? {
+//        if let fc = fetchedResultsController {
+//            return fc.sectionIndexTitles
+//        } else {
+//            return nil
+//        }
+//    }
 }
 
 // MARK: - CoreDataCollectionViewController (Fetches)
@@ -119,7 +119,7 @@ extension CoreDataCollectionViewController {
 extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        collectionView?.performBatchUpdates
+        collectionView?.performBatchUpdates(<#T##updates: (() -> Void)?##(() -> Void)?##() -> Void#>, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         
@@ -152,7 +152,8 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        collectionView.endUpdates()
+        //collectionView.endUpdates()
     }
 }
 
+}
