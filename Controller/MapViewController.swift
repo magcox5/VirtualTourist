@@ -29,13 +29,16 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
         super.viewDidLoad()
 
         // Set variables for detecting long press to drop pin
-        let lpgr = UILongPressGestureRecognizer(target: self, action: Selector(("handleLongPress:")))
+        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.handleLongPress(_:)))
+//let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(YourViewController.handleTap(_:)))
         lpgr.minimumPressDuration = 0.5
         lpgr.delaysTouchesBegan = true
         lpgr.delegate = self
         //self.collectionView.addGestureRecognizer(lpgr)
         //self.navigationController?.title = "Virtual Tourist"
             mapView.delegate = self
+            mapView.isUserInteractionEnabled = true
+            mapView.addGestureRecognizer(lpgr)
         // Check to see if last map location saved
         if let hasBeenOpenedBefore = UserDefaults.standard.value(forKey: "HasBeenOpenedBefore") {
            // If so, do nothing...
@@ -68,8 +71,8 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
         
         // Create a fetchrequest
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
-        //fr.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
-        //                      NSSortDescriptor(key: "creationDate", ascending: false)]
+        fr.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
+                              NSSortDescriptor(key: "latitude", ascending: false)]
         
         // Create the FetchedResultsController
         var fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
@@ -221,22 +224,11 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
         defaults.set(mapView.region.span.longitudeDelta, forKey: "MapLongitudeDelta")
     }
 
-    func handleLongPress(gestureReconizer: UILongPressGestureRecognizer) {
-        if gestureReconizer.state != UIGestureRecognizerState.ended {
+    @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state != UIGestureRecognizerState.ended {
             return
         }
         print("Long press on screen detected")
-        
-//        let p = gestureReconizer.locationInView(self.collectionView)
-//        let indexPath = self.collectionView.indexPathForItemAtPoint(p)
-//
-//        if let index = indexPath {
-//            var cell = self.collectionView.cellForItemAtIndexPath(index)
-//            // do stuff with your cell, for example print the indexPath
-//            print(index.row)
-//        } else {
-//            print("Could not find index path")
-//        }
     }
 }
 

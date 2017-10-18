@@ -19,7 +19,7 @@ class CoreDataCollectionViewController: UICollectionViewController {
         didSet {
             // Whenever the frc changes, we execute the search and
             // reload the collection
-            fetchedResultsController?.delegate = self as! NSFetchedResultsControllerDelegate
+            fetchedResultsController?.delegate = self as NSFetchedResultsControllerDelegate
             executeSearch()
             collectionView?.reloadData()
         }
@@ -32,9 +32,11 @@ class CoreDataCollectionViewController: UICollectionViewController {
 //        super.init(style: style)
 //    }
 
-    @objc init(fetchedResultsController fc : NSFetchedResultsController<NSFetchRequestResult>) {
-        fetchedResultsController = fc
-    }
+//    @objc init(fetchedResultsController fc : NSFetchedResultsController<NSFetchRequestResult>)
+//    {
+//        fetchedResultsController = fc
+//        super.init(collectionViewLayout: <#T##UICollectionViewLayout#>)
+//    }
 
     
     // Do not worry about this initializer. It has to be implemented
@@ -118,9 +120,9 @@ extension CoreDataCollectionViewController {
 
 extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        collectionView?.performBatchUpdates(<#T##updates: (() -> Void)?##(() -> Void)?##() -> Void#>, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
-    
+//    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//        collectionView?.performBatchUpdates((()-> Void)?, completion: nil)}
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         
         let set = IndexSet(integer: sectionIndex)
@@ -156,4 +158,4 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     }
 }
 
-}
+
