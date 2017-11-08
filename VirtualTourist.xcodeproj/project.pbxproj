@@ -12,6 +12,7 @@
 		DA8803401F86E1FB000D1B93 /* Pin+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88033C1F86E1FB000D1B93 /* Pin+CoreDataClass.swift */; };
 		DA8803411F86E1FB000D1B93 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88033D1F86E1FB000D1B93 /* Pin+CoreDataProperties.swift */; };
 		DA8803431F86E363000D1B93 /* CoreDataCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8803421F86E363000D1B93 /* CoreDataCollectionViewController.swift */; };
+		DA9681701FA81C52007A3687 /* CoreDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA96816F1FA81C52007A3687 /* CoreDataTableViewController.swift */; };
 		DAB42D381F79A64500E22EA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB42D371F79A64500E22EA8 /* AppDelegate.swift */; };
 		DAB42D3A1F79A64500E22EA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB42D391F79A64500E22EA8 /* ViewController.swift */; };
 		DAB42D3D1F79A64500E22EA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAB42D3B1F79A64500E22EA8 /* Main.storyboard */; };
@@ -48,6 +49,7 @@
 		DA88033C1F86E1FB000D1B93 /* Pin+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DA88033D1F86E1FB000D1B93 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DA8803421F86E363000D1B93 /* CoreDataCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataCollectionViewController.swift; sourceTree = "<group>"; };
+		DA96816F1FA81C52007A3687 /* CoreDataTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTableViewController.swift; sourceTree = "<group>"; };
 		DAB42D341F79A64500E22EA8 /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAB42D371F79A64500E22EA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAB42D391F79A64500E22EA8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 		DAB42D6D1F79AAE500E22EA8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				DA96816F1FA81C52007A3687 /* CoreDataTableViewController.swift */,
 				DA8803421F86E363000D1B93 /* CoreDataCollectionViewController.swift */,
 				DAB42D701F79B0CC00E22EA8 /* MapViewController.swift */,
 			);
@@ -325,6 +328,7 @@
 				DA8803401F86E1FB000D1B93 /* Pin+CoreDataClass.swift in Sources */,
 				DAB42D3A1F79A64500E22EA8 /* ViewController.swift in Sources */,
 				DAF7C15F1F9002CA009F850A /* CoreDataStack.swift in Sources */,
+				DA9681701FA81C52007A3687 /* CoreDataTableViewController.swift in Sources */,
 				DAB42D381F79A64500E22EA8 /* AppDelegate.swift in Sources */,
 				DAB42D401F79A64500E22EA8 /* VirtualTourist.xcdatamodeld in Sources */,
 				DAB42D711F79B0CC00E22EA8 /* MapViewController.swift in Sources */,

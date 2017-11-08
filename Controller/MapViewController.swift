@@ -11,7 +11,8 @@ import MapKit
 import CoreLocation
 import CoreData
 
-class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecognizerDelegate  {
+class MapViewController:  CoreDataTableViewController, MKMapViewDelegate, UIGestureRecognizerDelegate
+{
     
     // MARK:  Variables
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
@@ -30,12 +31,9 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
 
         // Set variables for detecting long press to drop pin
         let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.handleLongPress(_:)))
-//let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(YourViewController.handleTap(_:)))
         lpgr.minimumPressDuration = 0.5
         lpgr.delaysTouchesBegan = true
         lpgr.delegate = self
-        //self.collectionView.addGestureRecognizer(lpgr)
-        //self.navigationController?.title = "Virtual Tourist"
             mapView.delegate = self
             mapView.isUserInteractionEnabled = true
             mapView.addGestureRecognizer(lpgr)
@@ -99,7 +97,7 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
     }
 
     private func displayPinLocations() {
-        var annotations = [MKPointAnnotation]()
+        // var annotations = [MKPointAnnotation]()
         // let locations =
         
         //            for student in locations {
@@ -229,6 +227,38 @@ class MapViewController:  UIViewController, MKMapViewDelegate, UIGestureRecogniz
             return
         }
         print("Long press on screen detected")
+        // Add a pin at site of long press
+        let touchPoint = gestureRecognizer.location(in: mapView)
+        let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = newCoordinates
+        mapView.addAnnotation(annotation)
+        print("Annotation Added")
+
+        // NSNumber(double: (newCoordinates.latitude)! as Double)
+        // Now save to pin core data
+        let np =
+            Pin(latitude: newCoordinates.latitude as Double,
+             longitude: newCoordinates.longitude as Double,
+             name: "New Pin",
+             startingPhotoNumber: 1,
+            context: fetchedResultsController!.managedObjectContext)
+        print("Just created a new pin: \(np)")
+
+        // Finally segue to collection view
     }
 }
+//
+//extension MapViewController {
+//
+//    @objc func executeSearch() {
+//        if let fc = fetchedResultsController {
+//            do {
+//                try fc.performFetch()
+//            } catch let e as NSError {
+//                print("Error while trying to perform a String(describing: search: \n\(e)\n\(String(describing: fetchedResultsController))")
+//            }
+//        }
+//    }
+//}
 

@@ -1,17 +1,17 @@
 //
-//  CoreDataCollectionViewController.swift
+//  CoreDataTableViewController.swift
 //  VirtualTourist
 //
-//  Created by Molly Cox on 10/5/17.
+//  Created by Molly Cox on 10/30/17.
 //  Copyright © 2017 Molly Cox. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
-// MARK: - CoreDataCollectionViewController: UICollectionViewController
+// MARK: - CoreDataTableViewController: UITableViewController
 
-class CoreDataCollectionViewController: UICollectionViewController {
+class CoreDataTableViewController: UITableViewController {
     
     // MARK: Properties
     
@@ -19,15 +19,15 @@ class CoreDataCollectionViewController: UICollectionViewController {
         didSet {
             // Whenever the frc changes, we execute the search and
             // reload the table
-            fetchedResultsController?.delegate = (self as! NSFetchedResultsControllerDelegate)
+            fetchedResultsController?.delegate = self
             executeSearch()
-            collectionView?.reloadData()
+            tableView.reloadData()
         }
     }
     
     // MARK: Initializers
     
-    @objc init(fetchedResultsController fc : NSFetchedResultsController<NSFetchRequestResult>, style : UICollectionViewStyle = .plain) {
+    @objc init(fetchedResultsController fc : NSFetchedResultsController<NSFetchRequestResult>, style : UITableViewStyle = .plain) {
         fetchedResultsController = fc
         super.init(style: style)
     }
@@ -40,20 +40,20 @@ class CoreDataCollectionViewController: UICollectionViewController {
     }
 }
 
-// MARK: - CoreDataCollectionViewController (Subclass Must Implement)
+// MARK: - CoreDataTableViewController (Subclass Must Implement)
 
-extension CoreDataCollectionViewController {
+extension CoreDataTableViewController {
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        fatalError("This method MUST be implemented by a subclass of CoreDataCollectionViewController")
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        fatalError("This method MUST be implemented by a subclass of CoreDataTableViewController")
     }
 }
 
-// MARK: - CoreDataCollectionViewController (Table Data Source)
+// MARK: - CoreDataTableViewController (Table Data Source)
 
-extension CoreDataCollectionViewController {
+extension CoreDataTableViewController {
     
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         if let fc = fetchedResultsController {
             return (fc.sections?.count)!
         } else {
@@ -61,7 +61,7 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let fc = fetchedResultsController {
             return fc.sections![section].numberOfObjects
         } else {
@@ -69,7 +69,7 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if let fc = fetchedResultsController {
             return fc.sections![section].name
         } else {
@@ -77,7 +77,7 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+    override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         if let fc = fetchedResultsController {
             return fc.section(forSectionIndexTitle: title, at: index)
         } else {
@@ -85,7 +85,7 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    override func sectionIndexTitles(for collectionView: UITableView) -> [String]? {
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         if let fc = fetchedResultsController {
             return fc.sectionIndexTitles
         } else {
@@ -94,9 +94,9 @@ extension CoreDataCollectionViewController {
     }
 }
 
-// MARK: - CoreDataCollectionViewController (Fetches)
+// MARK: - CoreDataTableViewController (Fetches)
 
-extension CoreDataCollectionViewController {
+extension CoreDataTableViewController {
     
     @objc func executeSearch() {
         if let fc = fetchedResultsController {
@@ -109,12 +109,12 @@ extension CoreDataCollectionViewController {
     }
 }
 
-// MARK: - CoreDataCollectionViewController: NSFetchedResultsControllerDelegate
+// MARK: - CoreDataTableViewController: NSFetchedResultsControllerDelegate
 
-extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
+extension CoreDataTableViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        collectionView.beginUpdates()
+        tableView.beginUpdates()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
@@ -136,18 +136,19 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
         
         switch(type) {
         case .insert:
-            collectionView?.insertItems(at: [newIndexPath!])
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
         case .delete:
-            collectionView?.deleteItems(at: [indexPath!])
+            tableView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
-            collectionView?.reloadItems(at: [indexPath!])
+            tableView.reloadRows(at: [indexPath!], with: .fade)
         case .move:
-            collectionView?.deleteItems(at: [indexPath!])
-            collectionView?.insertItems(at: [newIndexPath!])
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
         }
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        collectionView.endUpdates()
+        tableView.endUpdates()
     }
 }
+
