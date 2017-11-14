@@ -19,7 +19,7 @@ class CoreDataCollectionViewController: UICollectionViewController {
         didSet {
             // Whenever the frc changes, we execute the search and
             // reload the table
-            fetchedResultsController?.delegate = (self as! NSFetchedResultsControllerDelegate)
+            fetchedResultsController?.delegate = (self as NSFetchedResultsControllerDelegate)
             executeSearch()
             collectionView?.reloadData()
         }
@@ -27,11 +27,16 @@ class CoreDataCollectionViewController: UICollectionViewController {
     
     // MARK: Initializers
     
-    @objc init(fetchedResultsController fc : NSFetchedResultsController<NSFetchRequestResult>, style : UICollectionViewStyle = .plain) {
+//    @objc init(fetchedResultsController fc : NSFetchedResultsController<NSFetchRequestResult>, style : UICollectionViewStyle = .plain) {
+//        fetchedResultsController = fc
+//        super.init(style: style)
+//    }
+
+    @objc init(fetchedResultsController fc : NSFetchedResultsController<NSFetchRequestResult>) {
         fetchedResultsController = fc
-        super.init(style: style)
+        super.init(collectionViewLayout: <#T##UICollectionViewLayout#>)
     }
-    
+
     // Do not worry about this initializer. It has to be implemented
     // because of the way Swift interfaces with an Objective C
     // protocol called NSArchiving. It's not relevant.
@@ -69,7 +74,7 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, titleForHeaderInSection section: Int) -> String? {
+    func collectionView(_ collectionView: UICollectionView, titleForHeaderInSection section: Int) -> String? {
         if let fc = fetchedResultsController {
             return fc.sections![section].name
         } else {
@@ -77,7 +82,7 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         if let fc = fetchedResultsController {
             return fc.section(forSectionIndexTitle: title, at: index)
         } else {
@@ -85,7 +90,7 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    override func sectionIndexTitles(for collectionView: UITableView) -> [String]? {
+    func sectionIndexTitles(for collectionView: UITableView) -> [String]? {
         if let fc = fetchedResultsController {
             return fc.sectionIndexTitles
         } else {
@@ -114,7 +119,10 @@ extension CoreDataCollectionViewController {
 extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        collectionView.beginUpdates()
+        collectionView?.performBatchUpdates({ () -> Void in
+            //self.collectionView.deleteItemsAtIndexPaths(subtractedIndexPaths)
+            //self.collectionView.insertItemsAtIndexPaths(addedIndexPaths)
+        }, completion: nil)
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
@@ -123,9 +131,9 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
         
         switch (type) {
         case .insert:
-            tableView.insertSections(set, with: .fade)
+            collectionView?.insertSections(set)
         case .delete:
-            tableView.deleteSections(set, with: .fade)
+            collectionView?.deleteSections(set)
         default:
             // irrelevant in our case
             break
@@ -148,6 +156,9 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        collectionView.endUpdates()
+        collectionView?.performBatchUpdates({ () -> Void in
+            //self.collectionView.deleteItemsAtIndexPaths(subtractedIndexPaths)
+            //self.collectionView.insertItemsAtIndexPaths(addedIndexPaths)
+        }, completion: nil)
     }
 }
