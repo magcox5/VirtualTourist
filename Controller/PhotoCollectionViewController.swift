@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import MapKit
 
 private let reuseIdentifier = "Cell"
 
-class PhotoCollectionViewController: CoreDataCollectionViewController {
+class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapViewDelegate {
+
+    // MARK: - Outlets
+    @IBOutlet weak var mapView: MKMapView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +26,7 @@ class PhotoCollectionViewController: CoreDataCollectionViewController {
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
+        mapView.centerCoordinate = CLLocationCoordinate2D(latitude: 0.0,longitude: 0.0)
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,21 +47,26 @@ class PhotoCollectionViewController: CoreDataCollectionViewController {
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        if let fc = _fetchedResultsController {
+            return (fc.sections?.count)!
+        } else {
+            return 0
+        }
+
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        if let fc = _fetchedResultsController {
+            return (fc.sections![section].numberOfObjects)
+        } else {
+            return 0
+        }
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
-    
+        cell.backgroundColor = UIColor.white
         return cell
     }
 

@@ -24,6 +24,7 @@
 		DAB42D6A1F79A66100E22EA8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB42D691F79A66100E22EA8 /* MapKit.framework */; };
 		DAB42D711F79B0CC00E22EA8 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB42D701F79B0CC00E22EA8 /* MapViewController.swift */; };
 		DAD13BE61FB4E9CD009B2AEF /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD13BE51FB4E9CD009B2AEF /* PhotoCollectionViewController.swift */; };
+		DAD13C101FCCDBBC009B2AEF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */; };
 		DAF7C15F1F9002CA009F850A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,8 @@
 		DAB42D691F79A66100E22EA8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		DAB42D701F79B0CC00E22EA8 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		DAD13BE51FB4E9CD009B2AEF /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
+		DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		DAD7D4321FCF6929004CB139 /* VirtualTourist 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "VirtualTourist 2.xcdatamodel"; sourceTree = "<group>"; };
 		DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -168,6 +171,7 @@
 				DA88033C1F86E1FB000D1B93 /* Pin+CoreDataClass.swift */,
 				DA88033D1F86E1FB000D1B93 /* Pin+CoreDataProperties.swift */,
 				DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */,
+				DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -332,6 +336,7 @@
 				DAB42D3A1F79A64500E22EA8 /* ViewController.swift in Sources */,
 				DAF7C15F1F9002CA009F850A /* CoreDataStack.swift in Sources */,
 				DA9681701FA81C52007A3687 /* CoreDataTableViewController.swift in Sources */,
+				DAD13C101FCCDBBC009B2AEF /* Constants.swift in Sources */,
 				DAD13BE61FB4E9CD009B2AEF /* PhotoCollectionViewController.swift in Sources */,
 				DAB42D381F79A64500E22EA8 /* AppDelegate.swift in Sources */,
 				DAB42D401F79A64500E22EA8 /* VirtualTourist.xcdatamodeld in Sources */,
@@ -641,9 +646,10 @@
 		DAB42D3E1F79A64500E22EA8 /* VirtualTourist.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				DAD7D4321FCF6929004CB139 /* VirtualTourist 2.xcdatamodel */,
 				DAB42D3F1F79A64500E22EA8 /* VirtualTourist.xcdatamodel */,
 			);
-			currentVersion = DAB42D3F1F79A64500E22EA8 /* VirtualTourist.xcdatamodel */;
+			currentVersion = DAD7D4321FCF6929004CB139 /* VirtualTourist 2.xcdatamodel */;
 			name = VirtualTourist.xcdatamodeld;
 			path = ../VirtualTourist/VirtualTourist.xcdatamodeld;
 			sourceTree = "<group>";

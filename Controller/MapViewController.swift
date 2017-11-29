@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 import CoreData
 
-class MapViewController:  CoreDataTableViewController, MKMapViewDelegate, UIGestureRecognizerDelegate
+class MapViewController:  CoreDataCollectionViewController, MKMapViewDelegate, UIGestureRecognizerDelegate
 {
     
     // MARK:  Variables
@@ -19,7 +19,9 @@ class MapViewController:  CoreDataTableViewController, MKMapViewDelegate, UIGest
     var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
     var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389), span: MKCoordinateSpanMake(0.03, 0.03))
 
+    // MARK:  Outlets
     @IBOutlet weak var mapView: MKMapView!
+    
     //declare the defaults...
     let defaults:UserDefaults = UserDefaults.standard
     
@@ -242,7 +244,7 @@ class MapViewController:  CoreDataTableViewController, MKMapViewDelegate, UIGest
              longitude: newCoordinates.longitude as Double,
              name: "New Pin",
              startingPhotoNumber: 1,
-            context: fetchedResultsController!.managedObjectContext)
+            context: _fetchedResultsController!.managedObjectContext)
         print("Just created a new pin: \(np)")
 
         // Finally segue to collection view
