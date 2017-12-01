@@ -2,7 +2,7 @@
 //  Photo+CoreDataProperties.swift
 //  VirtualTourist
 //
-//  Created by Molly Cox on 11/29/17.
+//  Created by Molly Cox on 12/1/17.
 //  Copyright © 2017 Molly Cox. All rights reserved.
 //
 //

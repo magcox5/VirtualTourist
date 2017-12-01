@@ -2,7 +2,7 @@
 //  Photo+CoreDataClass.swift
 //  VirtualTourist
 //
-//  Created by Molly Cox on 10/5/17.
+//  Created by Molly Cox on 12/1/17.
 //  Copyright © 2017 Molly Cox. All rights reserved.
 //
 //
@@ -12,7 +12,7 @@ import CoreData
 
 
 public class Photo: NSManagedObject {
-    @objc convenience init(context: NSManagedObjectContext) {
+    @objc convenience init(fileName: String, Photo: NSData, title: String, context: NSManagedObjectContext) {
         
         // An EntityDescription is an object that has access to all
         // the information you provided in the Entity part of the model

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DA88033E1F86E1FB000D1B93 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88033A1F86E1FB000D1B93 /* Photo+CoreDataClass.swift */; };
-		DA88033F1F86E1FB000D1B93 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88033B1F86E1FB000D1B93 /* Photo+CoreDataProperties.swift */; };
 		DA8803401F86E1FB000D1B93 /* Pin+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88033C1F86E1FB000D1B93 /* Pin+CoreDataClass.swift */; };
 		DA8803411F86E1FB000D1B93 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88033D1F86E1FB000D1B93 /* Pin+CoreDataProperties.swift */; };
 		DA8803431F86E363000D1B93 /* CoreDataCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8803421F86E363000D1B93 /* CoreDataCollectionViewController.swift */; };
@@ -23,6 +21,7 @@
 		DAB42D5B1F79A64600E22EA8 /* VirtualTouristUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB42D5A1F79A64600E22EA8 /* VirtualTouristUITests.swift */; };
 		DAB42D6A1F79A66100E22EA8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB42D691F79A66100E22EA8 /* MapKit.framework */; };
 		DAB42D711F79B0CC00E22EA8 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB42D701F79B0CC00E22EA8 /* MapViewController.swift */; };
+		DACDFC101FD1E3C200DB7C1F /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACDFC0F1FD1E3C200DB7C1F /* Photo+CoreDataClass.swift */; };
 		DAD13BE61FB4E9CD009B2AEF /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD13BE51FB4E9CD009B2AEF /* PhotoCollectionViewController.swift */; };
 		DAD13C101FCCDBBC009B2AEF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */; };
 		DAD7D4341FCF6D0D004CB139 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */; };
@@ -47,8 +46,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DA88033A1F86E1FB000D1B93 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
-		DA88033B1F86E1FB000D1B93 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DA88033C1F86E1FB000D1B93 /* Pin+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DA88033D1F86E1FB000D1B93 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DA8803421F86E363000D1B93 /* CoreDataCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataCollectionViewController.swift; sourceTree = "<group>"; };
@@ -69,10 +66,11 @@
 		DAB42D5C1F79A64600E22EA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DAB42D691F79A66100E22EA8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		DAB42D701F79B0CC00E22EA8 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		DACDFC0F1FD1E3C200DB7C1F /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DAD13BE51FB4E9CD009B2AEF /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
 		DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DAD7D4321FCF6929004CB139 /* VirtualTourist 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "VirtualTourist 2.xcdatamodel"; sourceTree = "<group>"; };
-		DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataProperties.swift"; path = "Model/Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,7 +103,6 @@
 		DAB42D2B1F79A64500E22EA8 = {
 			isa = PBXGroup;
 			children = (
-				DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */,
 				DAB42D361F79A64500E22EA8 /* VirtualTourist */,
 				DAB42D6B1F79AAAC00E22EA8 /* Model */,
 				DAB42D6C1F79AAC700E22EA8 /* View */,
@@ -169,8 +166,8 @@
 			isa = PBXGroup;
 			children = (
 				DAB42D3E1F79A64500E22EA8 /* VirtualTourist.xcdatamodeld */,
-				DA88033A1F86E1FB000D1B93 /* Photo+CoreDataClass.swift */,
-				DA88033B1F86E1FB000D1B93 /* Photo+CoreDataProperties.swift */,
+				DACDFC0F1FD1E3C200DB7C1F /* Photo+CoreDataClass.swift */,
+				DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */,
 				DA88033C1F86E1FB000D1B93 /* Pin+CoreDataClass.swift */,
 				DA88033D1F86E1FB000D1B93 /* Pin+CoreDataProperties.swift */,
 				DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */,
@@ -333,9 +330,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAD7D4341FCF6D0D004CB139 /* Photo+CoreDataProperties.swift in Sources */,
-				DA88033F1F86E1FB000D1B93 /* Photo+CoreDataProperties.swift in Sources */,
+				DACDFC101FD1E3C200DB7C1F /* Photo+CoreDataClass.swift in Sources */,
 				DA8803411F86E1FB000D1B93 /* Pin+CoreDataProperties.swift in Sources */,
-				DA88033E1F86E1FB000D1B93 /* Photo+CoreDataClass.swift in Sources */,
 				DA8803401F86E1FB000D1B93 /* Pin+CoreDataClass.swift in Sources */,
 				DAB42D3A1F79A64500E22EA8 /* ViewController.swift in Sources */,
 				DAF7C15F1F9002CA009F850A /* CoreDataStack.swift in Sources */,
