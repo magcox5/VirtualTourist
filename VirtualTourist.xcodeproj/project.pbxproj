@@ -25,6 +25,7 @@
 		DAB42D711F79B0CC00E22EA8 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB42D701F79B0CC00E22EA8 /* MapViewController.swift */; };
 		DAD13BE61FB4E9CD009B2AEF /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD13BE51FB4E9CD009B2AEF /* PhotoCollectionViewController.swift */; };
 		DAD13C101FCCDBBC009B2AEF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */; };
+		DAD7D4341FCF6D0D004CB139 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */; };
 		DAF7C15F1F9002CA009F850A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 		DAD13BE51FB4E9CD009B2AEF /* PhotoCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewController.swift; sourceTree = "<group>"; };
 		DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DAD7D4321FCF6929004CB139 /* VirtualTourist 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "VirtualTourist 2.xcdatamodel"; sourceTree = "<group>"; };
+		DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataProperties.swift"; path = "Model/Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,6 +105,7 @@
 		DAB42D2B1F79A64500E22EA8 = {
 			isa = PBXGroup;
 			children = (
+				DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */,
 				DAB42D361F79A64500E22EA8 /* VirtualTourist */,
 				DAB42D6B1F79AAAC00E22EA8 /* Model */,
 				DAB42D6C1F79AAC700E22EA8 /* View */,
@@ -329,6 +332,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAD7D4341FCF6D0D004CB139 /* Photo+CoreDataProperties.swift in Sources */,
 				DA88033F1F86E1FB000D1B93 /* Photo+CoreDataProperties.swift in Sources */,
 				DA8803411F86E1FB000D1B93 /* Pin+CoreDataProperties.swift in Sources */,
 				DA88033E1F86E1FB000D1B93 /* Photo+CoreDataClass.swift in Sources */,
