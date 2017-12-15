@@ -11,7 +11,8 @@ import MapKit
 import CoreLocation
 import CoreData
 
-class MapViewController:  CoreDataCollectionViewController, MKMapViewDelegate, UIGestureRecognizerDelegate
+class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognizerDelegate
+
 {
     
     // MARK:  Variables
@@ -22,6 +23,10 @@ class MapViewController:  CoreDataCollectionViewController, MKMapViewDelegate, U
     // MARK:  Outlets
     @IBOutlet weak var mapView: MKMapView!
     
+    @IBOutlet weak var deletePinsMsg: UIBarButtonItem!
+    
+    @IBOutlet weak var editPins: UIBarButtonItem!
+    
     //declare the defaults...
     let defaults:UserDefaults = UserDefaults.standard
     
@@ -31,6 +36,8 @@ class MapViewController:  CoreDataCollectionViewController, MKMapViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Hide Delete Pins Message on ToolBar
+        
         // Set variables for detecting long press to drop pin
         let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.handleLongPress(_:)))
         lpgr.minimumPressDuration = 0.5
@@ -64,16 +71,16 @@ class MapViewController:  CoreDataCollectionViewController, MKMapViewDelegate, U
         
         // Set the title
         title = "Virtual Tourist"
-        
+
         // Get the stack
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
-        
+
         // Create a fetchrequest
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
         fr.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
                               NSSortDescriptor(key: "latitude", ascending: false)]
-        
+
         // Create the FetchedResultsController
         var fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
 
@@ -143,9 +150,7 @@ class MapViewController:  CoreDataCollectionViewController, MKMapViewDelegate, U
         
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.canShowCallout = true
-            pinView!.pinTintColor = .blue
-            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            pinView!.pinTintColor = .red
         }
         else {
             pinView!.annotation = annotation
@@ -154,24 +159,6 @@ class MapViewController:  CoreDataCollectionViewController, MKMapViewDelegate, U
         return pinView
     }
     
-    
-    // This delegate method is implemented to respond to taps. It opens the system browser
-    // to the URL specified in the annotationViews subtitle property.
-    
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        //            if control == view.rightCalloutAccessoryView {
-        //                if let toOpen = view.annotation?.subtitle! {
-        //                    if OnTheMapClient.useableURL(thisURL: toOpen) {
-        //                        //if (mapClient?.useableURL(thisURL: toOpen))! {
-        //                        if let url = URL(string: toOpen) {
-        //                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        //                        }
-        //                    } else {
-        //                        displayError(errorString: "Looks like this isn't a valid URL...")
-        //                    }
-        //                }
-        //            }
-    }
     
     
     func refreshMap(){
@@ -239,15 +226,41 @@ class MapViewController:  CoreDataCollectionViewController, MKMapViewDelegate, U
 
         // NSNumber(double: (newCoordinates.latitude)! as Double)
         // Now save to pin core data
+        
+        // Get the stack
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let stack = delegate.stack
+        
+        // Create a fetchrequest
+        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
+        fr.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
+                              NSSortDescriptor(key: "latitude", ascending: false)]
+        
+        // Create the FetchedResultsController
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
+        
+
+        
         let np =
             Pin(latitude: newCoordinates.latitude as Double,
              longitude: newCoordinates.longitude as Double,
              name: "New Pin",
              startingPhotoNumber: 1,
-            context: _fetchedResultsController!.managedObjectContext)
+             context: fetchedResultsController.managedObjectContext)
         print("Just created a new pin: \(np)")
 
-        // Finally segue to collection view
+        // Get photos from flickr based on pin location
+        // Store photos in Photo entity
+        getFlickrPhotos()
+        
+        // Finally segue to collection view to display photos
+        let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC")
+        present(controller, animated: true, completion: nil)
+    }
+}
+extension MapViewController {
+    func getFlickrPhotos(){
+        // TODO:  go to flickr with pin coordinates and load into photo database for that pin
     }
 }
 //

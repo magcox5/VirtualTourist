@@ -14,10 +14,14 @@ private let reuseIdentifier = "Cell"
 class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapViewDelegate {
 
     // MARK: - Outlets
+    
+    @IBOutlet weak var pinWithoutPhotos: UILabel!
     @IBOutlet weak var mapView: MKMapView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        pinWithoutPhotos.isHidden = false
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
