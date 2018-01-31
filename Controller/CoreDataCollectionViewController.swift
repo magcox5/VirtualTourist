@@ -11,7 +11,7 @@ import CoreData
 
 // MARK: - CoreDataCollectionViewController: UICollectionViewController
 
-class CoreDataCollectionViewController: UICollectionViewController {
+class CoreDataCollectionViewController: UICollectionViewController, NSFetchedResultsControllerDelegate {
 
     var _fetchedResultsController: NSFetchedResultsController<Pin>? = nil
     var blockOperations: [BlockOperation] = []

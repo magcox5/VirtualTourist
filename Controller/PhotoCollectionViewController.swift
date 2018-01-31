@@ -11,13 +11,26 @@ import MapKit
 
 private let reuseIdentifier = "Cell"
 
+//class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
+
 class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapViewDelegate {
 
     // MARK: - Outlets
     
     @IBOutlet weak var pinWithoutPhotos: UILabel!
     @IBOutlet weak var mapView: MKMapView!
-
+    
+    @IBOutlet weak var newCollection: UIToolbar!
+    @IBOutlet weak var okButton: UIBarButtonItem!
+    
+    @IBAction func okButton(_ sender: Any) {
+        //TODO: return to previous (map) screen
+    }
+    
+    @IBAction func newCollection(_ sender: Any) {
+        //TODO:  refresh photos in collection
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,10 +40,13 @@ class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapView
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
 
         // Do any additional setup after loading the view.
         mapView.centerCoordinate = CLLocationCoordinate2D(latitude: 0.0,longitude: 0.0)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -68,7 +84,7 @@ class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapView
         }
     }
 
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    internal override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         cell.backgroundColor = UIColor.white
         return cell

@@ -24,9 +24,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     @IBOutlet weak var mapView: MKMapView!
     
     @IBOutlet weak var deletePinsMsg: UIBarButtonItem!
+    @IBOutlet weak var editPinMsg: UIBarButtonItem!
+    @IBOutlet weak var vtToolbar: UIToolbar!
     
-    @IBOutlet weak var editPins: UIBarButtonItem!
-    
+    @IBAction func editPins(_ sender: Any) {
+        if vtToolbar.isHidden == true {
+            vtToolbar.isHidden = false
+            editPinMsg.title = "Done"
+        } else {
+            vtToolbar.isHidden = true
+            editPinMsg.title = "Edit"
+        }
+    }
+
     //declare the defaults...
     let defaults:UserDefaults = UserDefaults.standard
     
