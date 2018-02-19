@@ -54,6 +54,10 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
         mapRegion.center = vtCoordinate
         mapView.setRegion(mapRegion, animated: true)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = vtCoordinate
+        mapView.addAnnotation(annotation)
+
         
         // Register cell classes
         collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
