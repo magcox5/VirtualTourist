@@ -8,12 +8,20 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 private let reuseIdentifier = "Cell"
 
-//class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, MKMapViewDelegate {
-
-class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapViewDelegate {
+class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
+    MKMapViewDelegate,
+    NSFetchedResultsControllerDelegate {
+    
+    // MARK:  - Variables
+    var _fetchedResultsController: NSFetchedResultsController<Pin>? = nil
+    var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
+    var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
+    
+//class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapViewDelegate {
 
     // MARK: - Outlets
     
@@ -23,8 +31,11 @@ class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapView
     @IBOutlet weak var newCollection: UIToolbar!
     @IBOutlet weak var okButton: UIBarButtonItem!
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     @IBAction func okButton(_ sender: Any) {
         //TODO: return to previous (map) screen
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func newCollection(_ sender: Any) {
@@ -39,13 +50,18 @@ class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapView
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
+        // Set the region
+        var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
+        mapRegion.center = vtCoordinate
+        mapView.setRegion(mapRegion, animated: true)
+        
         // Register cell classes
         collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView?.delegate = self
         collectionView?.dataSource = self
 
         // Do any additional setup after loading the view.
-        mapView.centerCoordinate = CLLocationCoordinate2D(latitude: 0.0,longitude: 0.0)
+        mapView.centerCoordinate = vtCoordinate
         
     }
 
@@ -66,7 +82,7 @@ class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapView
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         if let fc = _fetchedResultsController {
             return (fc.sections?.count)!
         } else {
@@ -76,7 +92,7 @@ class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapView
     }
 
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let fc = _fetchedResultsController {
             return (fc.sections![section].numberOfObjects)
         } else {
@@ -84,7 +100,7 @@ class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapView
         }
     }
 
-    internal override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         cell.backgroundColor = UIColor.white
         return cell

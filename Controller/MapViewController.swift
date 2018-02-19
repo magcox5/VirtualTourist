@@ -18,7 +18,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     // MARK:  Variables
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
     var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
-    var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389), span: MKCoordinateSpanMake(0.03, 0.03))
 
     // MARK:  Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -71,6 +70,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         }
         
         // Set the region
+        var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
         vtCoordinate = CLLocationCoordinate2D(latitude: defaults.double(forKey: "MapLatitude"), longitude: defaults.double(forKey: "MapLongitude"))
         mapRegion.center = vtCoordinate
         mapRegion.span.latitudeDelta = defaults.double(forKey: "MapLatitudeDelta")
@@ -93,7 +93,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
 
         // Create the FetchedResultsController
         var fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -249,8 +249,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         // Create the FetchedResultsController
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
         
-
-        
         let np =
             Pin(latitude: newCoordinates.latitude as Double,
              longitude: newCoordinates.longitude as Double,
@@ -263,9 +261,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         // Store photos in Photo entity
         getFlickrPhotos()
         
+        // Pass map location to photoVC
+        
         // Finally segue to collection view to display photos
-        let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC")
-        present(controller, animated: true, completion: nil)
+        let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
+        controller?.vtCoordinate = annotation.coordinate
+        controller?.vtSpan = mapView.region.span
+        present(controller!, animated: true, completion: nil)
     }
 }
 extension MapViewController {
