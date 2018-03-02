@@ -21,8 +21,8 @@ public class Pin: NSManagedObject {
         // you need it to create an instance of this class.
         if let ent = NSEntityDescription.entity(forEntityName: "Pin", in: context) {
             self.init(entity: ent, insertInto: context)
-            self.latitude = 0.0
-            self.longitude = 0.0
+            self.latitude = latitude
+            self.longitude = longitude
             self.name = name
             self.startingPhotoNumber = 1
         } else {

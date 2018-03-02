@@ -18,6 +18,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     // MARK:  Variables
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
     var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
+    var vtBBox: String = " "
 
     // MARK:  Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -116,8 +117,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
 
     private func displayPinLocations() {
-        // var annotations = [MKPointAnnotation]()
-        // let locations =
+         //var annotations = [MKPointAnnotation]()
+         //let locations =
         
         //            for student in locations {
         //                // Notice that the float values are being used to create CLLocationDegree values.
@@ -147,10 +148,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
     
     // MARK: - MKMapViewDelegate
-    
-    // Here we create a view with a "right callout accessory view". You might choose to look into other
-    // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
-    // method in TableViewDataSource.
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
@@ -204,6 +201,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         mapChangedFromUserInteraction = mapViewRegionDidChangeFromUserInteraction()
         if (mapChangedFromUserInteraction) {
             // user changed map region
+            updateMapLocation()
         }
     }
     
@@ -226,17 +224,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
             return
         }
         print("Long press on screen detected")
-        // Add a pin at site of long press
+        // Add a pin at site of long press to the map
         let touchPoint = gestureRecognizer.location(in: mapView)
         let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+        print("The latitude is: ", newCoordinates.latitude)
+        print("The longitude is: ", newCoordinates.longitude)
         let annotation = MKPointAnnotation()
         annotation.coordinate = newCoordinates
         mapView.addAnnotation(annotation)
-        print("Annotation Added")
+        print("Annotation Added to the map")
 
-        // NSNumber(double: (newCoordinates.latitude)! as Double)
-        // Now save to pin core data
-        
         // Get the stack
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let stack = delegate.stack
@@ -249,17 +246,24 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         // Create the FetchedResultsController
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
         
-        let np =
-            Pin(latitude: newCoordinates.latitude as Double,
-             longitude: newCoordinates.longitude as Double,
-             name: "New Pin",
-             startingPhotoNumber: 1,
-             context: fetchedResultsController.managedObjectContext)
-        print("Just created a new pin: \(np)")
+        // Add the pin to the core data
+        let np = Pin(latitude: newCoordinates.latitude as Double,
+                     longitude: newCoordinates.longitude as Double,
+                     name: "This New Pin Right Here",
+                     startingPhotoNumber: 1,
+                     context: fetchedResultsController.managedObjectContext)
+            //Pin(latitude: newCoordinates.latitude as Double,
+            //    longitude: newCoordinates.longitude as Double),
+             //name: "This New Pin Right Here",
+             //startingPhotoNumber: 1,
+             //context: fetchedResultsController.managedObjectContext)
+        print("Just created a new pin: \(np.latitude, np.longitude, np.name!)")
 
+        // TODO:  Convert coordinates to a bbox string
+        vtBBox = convertCoordToBBox(latLon: newCoordinates)
         // Get photos from flickr based on pin location
         // Store photos in Photo entity
-        getFlickrPhotos()
+        getFlickrPhotos(vtBBox: vtBBox)
         
         // Pass map location to photoVC
         
@@ -271,9 +275,147 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
 }
 extension MapViewController {
-    func getFlickrPhotos(){
-        // TODO:  go to flickr with pin coordinates and load into photo database for that pin
+    func convertCoordToBBox(latLon: CLLocationCoordinate2D) -> String {
+        var minLat: Double = latLon.latitude as Double - Double(Constants.Flickr.SearchBBoxHalfHeight)
+        var minLon: Double = latLon.longitude as Double - Double(Constants.Flickr.SearchBBoxHalfWidth)
+        var maxLat: Double = latLon.latitude as Double + Double(Constants.Flickr.SearchBBoxHalfHeight)
+        var maxLon: Double = latLon.longitude as Double + Double(Constants.Flickr.SearchBBoxHalfWidth)
+        
+        // If any of the values are out of range, set them to the min or max of the range
+        if (!isValueInRange(value: minLat, min: Double(Constants.Flickr.SearchLatRange.0), max: Double(Constants.Flickr.SearchLatRange.1))) {
+            minLat = Double(Constants.Flickr.SearchLatRange.0)
+        }
+        if (!isValueInRange(value: minLon, min: Double(Constants.Flickr.SearchLonRange.0), max: Double(Constants.Flickr.SearchLonRange.1))) {
+            minLon = Double(Constants.Flickr.SearchLonRange.0)
+        }
+        
+        if (!isValueInRange(value: maxLat, min: Double(Constants.Flickr.SearchLatRange.0), max: Double(Constants.Flickr.SearchLatRange.1))) {
+            maxLat = Double(Constants.Flickr.SearchLatRange.1)
+        }
+        if (!isValueInRange(value: maxLon, min: Double(Constants.Flickr.SearchLonRange.0), max: Double(Constants.Flickr.SearchLonRange.1))) {
+            maxLon = Double(Constants.Flickr.SearchLonRange.1)
+        }
+        
+        return "\(minLon),\(minLat),\(maxLon),\(maxLat)"
     }
+    func getFlickrPhotos(vtBBox: String){
+
+        // TODO:  go to flickr with bounding box and load into photo database for that pin
+        // TODO: Set necessary parameters!
+        let methodParameters: [String: String?] =
+            [Constants.FlickrParameterKeys.SafeSearch:Constants.FlickrParameterValues.UseSafeSearch,
+             Constants.FlickrParameterKeys.BoundingBox:vtBBox,
+             Constants.FlickrParameterKeys.Per_Page:Constants.FlickrParameterValues.Per_Page,
+             Constants.FlickrParameterKeys.Extras:Constants.FlickrParameterValues.MediumURL,
+             Constants.FlickrParameterKeys.APIKey:Constants.FlickrParameterValues.APIKey,
+             Constants.FlickrParameterKeys.Method:Constants.FlickrParameterValues.SearchMethod,
+             Constants.FlickrParameterKeys.Format:Constants.FlickrParameterValues.ResponseFormat,
+             Constants.FlickrParameterKeys.NoJSONCallback:Constants.FlickrParameterValues.DisableJSONCallback]
+//        displayImageFromFlickrBySearch(methodParameters: methodParameters as [String : AnyObject])
+        
+        // create session and request
+        let session = URLSession.shared
+        let request = NSURLRequest(url: flickrURLFromParameters(parameters: methodParameters as [String : AnyObject]) as URL)
+        
+        // create network request
+        let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
+            
+            // if an error occurs, print it and re-enable the UI
+            func displayError(error: String) {
+                print(error)
+                //DispatchQueue.main.async {
+                    //self.setUIEnabled(enabled: true)
+                    //self.photoTitleLabel.text = "No photo returned. Try again."
+                    //self.photoImageView.image = nil
+                //}
+            }
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                displayError(error: "There was an error with your request: \(String(describing: error))")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                displayError(error: "Your request returned a status code other than 2xx!")
+                return
+            }
+            
+            guard let data = data else
+            {
+                displayError(error: "No Data was returned by this request!")
+                return
+            }
+            
+            
+            // Deserialize JSON and extract necessary values
+            let parsedResult: AnyObject!
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
+            } catch
+            {
+                displayError(error: "Could not parse data the data as JSON: '\(data)'")
+                return
+            }
+            
+            /* GUARD: Did Flicker return an error (stat != ok)? */
+            guard let stat = parsedResult[Constants.FlickrResponseKeys.Status]
+                as? String, stat == Constants.FlickrResponseValues.OKStatus
+                else {
+                    displayError(error: "Flickr API returned an error.  See error code and message in \(parsedResult)")
+                    return
+            }
+            
+            
+            if let photosDictionary =
+                parsedResult[Constants.FlickrResponseKeys.Photos] as? [String: AnyObject]
+                //                ,
+                // photoArray = photosDictionary["photo"] as? [[String: AnyObject]]
+            {
+                /* GUARD: Is "pages" key in the photosDictionary? */
+                guard let totalPages = photosDictionary[Constants.FlickrResponseKeys.Pages] as? Int else {
+                    displayError(error: "Cannot find key '\(Constants.FlickrResponseKeys.Pages)' in \(photosDictionary)")
+                    return
+                }
+                
+                // pick a random page!
+                let pageLimit = min(totalPages, 40)
+                let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
+                print("Here's my random page")
+                print(randomPage)
+                //self.displayImageFromFlickrBySearch(methodParameters: methodParameters, withPageNumber: randomPage)
+            }
+        }
+        // start the task!
+        task.resume()
+        
+        // TODO: Store photos in core data
+        print("Now to store photos in core data")
+    }
+
+    func isValueInRange(value: Double, min: Double, max: Double) -> Bool {
+            return !(value < min || value > max)
+        }
+    
+    // MARK: Helper for Creating a URL from Parameters
+    
+    private func flickrURLFromParameters(parameters: [String:AnyObject]) -> NSURL {
+        
+        let components = NSURLComponents()
+        components.scheme = Constants.Flickr.APIScheme
+        components.host = Constants.Flickr.APIHost
+        components.path = Constants.Flickr.APIPath
+        components.queryItems = [NSURLQueryItem]() as [URLQueryItem]
+        
+        for (key, value) in parameters {
+            let queryItem = NSURLQueryItem(name: key, value: "\(value)")
+            components.queryItems!.append(queryItem as URLQueryItem)
+        }
+        
+        return components.url! as NSURL
+    }
+    
 }
 //
 //extension MapViewController {

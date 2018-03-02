@@ -6,41 +6,26 @@
 //  Copyright © 2017 Molly Cox. All rights reserved.
 //
 
-// Taken from "Sleeping in the Library" and "On The Map" apps
+import UIKit
 
-    // MARK: Constants
-    struct Constants {
-        
-        // MARK: API Key
-        static let ApiKey : String = "40711feae697263b6f0b3452fe6c0ca7"
-        
+// MARK: - Constants
+
+struct Constants {
+    
+    // MARK: Flickr
+    struct Flickr {
         // MARK:  Secret
         static let Secret : String =
         "6dce7b392e0cfee3"
-        
-        // MARK:  Content-Type
-        static let ContentType: String = "application/json"
-        
-        // MARK: URLs
-        static let ApiScheme = "https://"
-        static let ApiHost = "parse.udacity.com"
-        static let ApiPath = "/parse/classes"
-        static let ApiSearch = "/StudentLocation?limit=100&order=-updatedAt"
-        static let ApiStudent = "/StudentLocation"
-        static let signupURL = "https://auth.udacity.com/sign-up?next=https%3A%2F%2Fclassroom.udacity.com%2Fauthenticated"
-        static let UdacityURL = "https://www.udacity.com/api/session"
-        
-        // MARK:  HTTP Header Fields
-        static let httpHeaderApiKey = "X-Parse-REST-API-Key"
-        static let httpHeaderAppID = "X-Parse-Application-Id"
-        static let httpHeaderContentType = "Content-Type"
-        
-        
-    }
-
-    // MARK: Flickr
-    struct Flickr {
+        static let APIScheme = "https"
+        static let APIHost = "api.flickr.com"
+        static let APIPath = "/services/rest"
         static let APIBaseURL = "https://api.flickr.com/services/rest/"
+
+        static let SearchBBoxHalfWidth = 1.0
+        static let SearchBBoxHalfHeight = 1.0
+        static let SearchLatRange = (-90.0, 90.0)
+        static let SearchLonRange = (-180.0, 180.0)
     }
     
     // MARK: Flickr Parameter Keys
@@ -51,16 +36,24 @@
         static let Extras = "extras"
         static let Format = "format"
         static let NoJSONCallback = "nojsoncallback"
+        static let SafeSearch = "safe_search"
+        static let Text = "text"
+        static let BoundingBox = "bbox"
+        static let Page = "page"
+        static let Per_Page = "per_page"
     }
     
     // MARK: Flickr Parameter Values
     struct FlickrParameterValues {
+        static let SearchMethod = "flickr.photos.search"
         static let APIKey = "40711feae697263b6f0b3452fe6c0ca7"
         static let ResponseFormat = "json"
         static let DisableJSONCallback = "1" /* 1 means "yes" */
         static let GalleryPhotosMethod = "flickr.galleries.getPhotos"
-        static let GalleryID = "5704-72157622566655097"
+        // static let GalleryID = "5704-72157622566655097"
         static let MediumURL = "url_m"
+        static let UseSafeSearch = "1"
+        static let Per_Page = "21"
     }
     
     // MARK: Flickr Response Keys
@@ -70,10 +63,12 @@
         static let Photo = "photo"
         static let Title = "title"
         static let MediumURL = "url_m"
+        static let Pages = "pages"
+        static let Total = "total"
     }
     
     // MARK: Flickr Response Values
     struct FlickrResponseValues {
         static let OKStatus = "ok"
     }
-
+}
