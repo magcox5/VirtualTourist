@@ -246,19 +246,31 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         // Create the FetchedResultsController
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
         
-        // Add the pin to the core data
-        let np = Pin(latitude: newCoordinates.latitude as Double,
-                     longitude: newCoordinates.longitude as Double,
-                     name: "This New Pin Right Here",
-                     startingPhotoNumber: 1,
-                     context: fetchedResultsController.managedObjectContext)
-            //Pin(latitude: newCoordinates.latitude as Double,
-            //    longitude: newCoordinates.longitude as Double),
-             //name: "This New Pin Right Here",
-             //startingPhotoNumber: 1,
-             //context: fetchedResultsController.managedObjectContext)
-        print("Just created a new pin: \(np.latitude, np.longitude, np.name!)")
-
+        // Get a name for the pin,
+        // Then add the pin to core data
+//        getPinName(coordinates: newCoordinates, {pinName,error in
+//            guard let pinName = pinName, error == nil else {return}
+//            DispatchQueue.main.async {
+//                let np = Pin(latitude: newCoordinates.latitude as Double,
+//                             longitude: newCoordinates.longitude as Double,
+//                             name: pinName,
+//                             startingPhotoNumber: 1,
+//                             context: fetchedResultsController.managedObjectContext)
+//                print("Just created a new pin: \(np.latitude, np.longitude, np.name!)")
+//            }
+//        }
+        getPinName(coordinates: newCoordinates) { pinName, error in
+            guard let pinName = pinName, error == nil else {return}
+            DispatchQueue.main.async {
+                let np = Pin(latitude: newCoordinates.latitude as Double,
+                             longitude: newCoordinates.longitude as Double,
+                             name: pinName,
+                             startingPhotoNumber: 1,
+                             context: fetchedResultsController.managedObjectContext)
+                print("Just created a new pin: \(np)")
+            }
+        }
+            
         // TODO:  Convert coordinates to a bbox string
         vtBBox = convertCoordToBBox(latLon: newCoordinates)
         // Get photos from flickr based on pin location
@@ -297,6 +309,23 @@ extension MapViewController {
         }
         
         return "\(minLon),\(minLat),\(maxLon),\(maxLat)"
+    }
+    
+    func getPinName(coordinates: CLLocationCoordinate2D, completionHandler: @escaping (String?, Error?) -> ()) {
+        let pinLat: CLLocationDegrees = coordinates.latitude
+        let pinLon: CLLocationDegrees = coordinates.longitude
+        let pinLoc: CLLocation = CLLocation(latitude: pinLat, longitude: pinLon)
+        CLGeocoder().reverseGeocodeLocation(pinLoc, completionHandler: { (placemarks, error) in
+            if error == nil {
+                let firstLocation = placemarks?[0]
+                //let pinName = (firstLocation?.country)! + firstLocation?.locality + firstLocation?.administrativeArea + firstLocation?.postalCode
+                let pinName = firstLocation!.country! + firstLocation!.locality! + firstLocation!.administrativeArea! + firstLocation!.postalCode!
+                completionHandler(pinName, nil)
+            } else {
+                // An error occurred during geocoding
+                completionHandler(" ", error)
+            }
+        })
     }
     func getFlickrPhotos(vtBBox: String){
 
@@ -366,7 +395,6 @@ extension MapViewController {
                     displayError(error: "Flickr API returned an error.  See error code and message in \(parsedResult)")
                     return
             }
-            
             
             if let photosDictionary =
                 parsedResult[Constants.FlickrResponseKeys.Photos] as? [String: AnyObject]
