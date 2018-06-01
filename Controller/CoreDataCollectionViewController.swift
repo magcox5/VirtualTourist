@@ -17,42 +17,36 @@ class CoreDataCollectionViewController: UICollectionViewController, NSFetchedRes
     var blockOperations: [BlockOperation] = []
     var shouldReloadCollectionView = false
 
-
+    // Set the context
+    let delegate = UIApplication.shared.delegate as! AppDelegate
+    
+    var dataController:DataController!
+    
+    var fetchedResultsController:NSFetchedResultsController<Photo>!
+    
+    
+    fileprivate func setupFetchedResultsController() {
+        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        fetchedResultsController.delegate = self
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
+    }
+    
+    //let stack = delegate.stack
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Get the stack
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        let stack = delegate.stack
-
-        var fetchedResultController: NSFetchedResultsController<Pin> {
-            if _fetchedResultsController != nil {
-                return _fetchedResultsController!
-            }
-            
-            let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
-            let managedObjectContext = stack.context
-            
-            fetchRequest.predicate = NSPredicate(format: "...")
-            
-            // sort by item text
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "...", ascending: true)]
-            let resultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-            
-            resultsController.delegate = self as? NSFetchedResultsControllerDelegate;
-            _fetchedResultsController = resultsController
-            
-            do {
-                try _fetchedResultsController!.performFetch()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror)")
-            }
-            return _fetchedResultsController!
-        }
-            
-
+        setupFetchedResultsController()
     }
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
