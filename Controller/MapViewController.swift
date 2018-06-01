@@ -117,6 +117,29 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
 
     private func displayPinLocations() {
+        var annotations = [MKPointAnnotation]()
+        let locations = self.mapView.annotations
+        for pin in locations {
+            let lat = CLLocationDegrees(pin.coordinate.latitude)
+            let lon = CLLocationDegrees(pin.coordinate.longitude)
+            
+            // The lat and lon are used to create a CLLocationCoordinates2D instance.
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            
+            // Here we create the annotation and set its coordiate, title, and subtitle properties
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            //annotation.title = "\(first) \(last)"
+            //annotation.subtitle = mediaURL
+            
+            // Finally we place the annotation in an array of annotations.
+            annotations.append(annotation)
+            
+        }
+            // When the array is complete, we add the annotations to the map.
+            self.mapView.addAnnotations(annotations)
+            
+        
          //var annotations = [MKPointAnnotation]()
          //let locations =
         
@@ -248,17 +271,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         
         // Get a name for the pin,
         // Then add the pin to core data
-//        getPinName(coordinates: newCoordinates, {pinName,error in
-//            guard let pinName = pinName, error == nil else {return}
-//            DispatchQueue.main.async {
-//                let np = Pin(latitude: newCoordinates.latitude as Double,
-//                             longitude: newCoordinates.longitude as Double,
-//                             name: pinName,
-//                             startingPhotoNumber: 1,
-//                             context: fetchedResultsController.managedObjectContext)
-//                print("Just created a new pin: \(np.latitude, np.longitude, np.name!)")
-//            }
-//        }
+
         getPinName(coordinates: newCoordinates) { pinName, error in
             guard let pinName = pinName, error == nil else {return}
             DispatchQueue.main.async {
