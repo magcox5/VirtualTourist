@@ -16,6 +16,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
 {
     
     // MARK:  Variables
+    var dataController:DataController!
+    
+    var fetchedResultsController:NSFetchedResultsController<Pin>!
+
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
     var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
     var vtBBox: String = " "

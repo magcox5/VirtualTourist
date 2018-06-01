@@ -12,7 +12,6 @@
 		DA8803431F86E363000D1B93 /* CoreDataCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8803421F86E363000D1B93 /* CoreDataCollectionViewController.swift */; };
 		DA9681701FA81C52007A3687 /* CoreDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA96816F1FA81C52007A3687 /* CoreDataTableViewController.swift */; };
 		DAB42D381F79A64500E22EA8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB42D371F79A64500E22EA8 /* AppDelegate.swift */; };
-		DAB42D3A1F79A64500E22EA8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB42D391F79A64500E22EA8 /* ViewController.swift */; };
 		DAB42D3D1F79A64500E22EA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAB42D3B1F79A64500E22EA8 /* Main.storyboard */; };
 		DAB42D401F79A64500E22EA8 /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DAB42D3E1F79A64500E22EA8 /* VirtualTourist.xcdatamodeld */; };
 		DAB42D421F79A64500E22EA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAB42D411F79A64500E22EA8 /* Assets.xcassets */; };
@@ -25,6 +24,7 @@
 		DAD13BE61FB4E9CD009B2AEF /* PhotoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD13BE51FB4E9CD009B2AEF /* PhotoCollectionViewController.swift */; };
 		DAD13C101FCCDBBC009B2AEF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */; };
 		DAD7D4341FCF6D0D004CB139 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */; };
+		DAF6B09420C1FC4A0033A2A9 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF6B09320C1FC4A0033A2A9 /* DataController.swift */; };
 		DAF7C15F1F9002CA009F850A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,7 +52,6 @@
 		DA96816F1FA81C52007A3687 /* CoreDataTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTableViewController.swift; sourceTree = "<group>"; };
 		DAB42D341F79A64500E22EA8 /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAB42D371F79A64500E22EA8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		DAB42D391F79A64500E22EA8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DAB42D3C1F79A64500E22EA8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DAB42D3F1F79A64500E22EA8 /* VirtualTourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualTourist.xcdatamodel; sourceTree = "<group>"; };
 		DAB42D411F79A64500E22EA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -71,6 +70,7 @@
 		DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DAD7D4321FCF6929004CB139 /* VirtualTourist 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "VirtualTourist 2.xcdatamodel"; sourceTree = "<group>"; };
 		DAD7D4331FCF6D0D004CB139 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DAF6B09320C1FC4A0033A2A9 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -128,7 +128,6 @@
 			isa = PBXGroup;
 			children = (
 				DAB42D371F79A64500E22EA8 /* AppDelegate.swift */,
-				DAB42D391F79A64500E22EA8 /* ViewController.swift */,
 				DAB42D411F79A64500E22EA8 /* Assets.xcassets */,
 				DAB42D431F79A64500E22EA8 /* LaunchScreen.storyboard */,
 				DAB42D461F79A64500E22EA8 /* Info.plist */,
@@ -172,6 +171,7 @@
 				DA88033D1F86E1FB000D1B93 /* Pin+CoreDataProperties.swift */,
 				DAF7C15E1F9002CA009F850A /* CoreDataStack.swift */,
 				DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */,
+				DAF6B09320C1FC4A0033A2A9 /* DataController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -333,9 +333,9 @@
 				DACDFC101FD1E3C200DB7C1F /* Photo+CoreDataClass.swift in Sources */,
 				DA8803411F86E1FB000D1B93 /* Pin+CoreDataProperties.swift in Sources */,
 				DA8803401F86E1FB000D1B93 /* Pin+CoreDataClass.swift in Sources */,
-				DAB42D3A1F79A64500E22EA8 /* ViewController.swift in Sources */,
 				DAF7C15F1F9002CA009F850A /* CoreDataStack.swift in Sources */,
 				DA9681701FA81C52007A3687 /* CoreDataTableViewController.swift in Sources */,
+				DAF6B09420C1FC4A0033A2A9 /* DataController.swift in Sources */,
 				DAD13C101FCCDBBC009B2AEF /* Constants.swift in Sources */,
 				DAD13BE61FB4E9CD009B2AEF /* PhotoCollectionViewController.swift in Sources */,
 				DAB42D381F79A64500E22EA8 /* AppDelegate.swift in Sources */,
