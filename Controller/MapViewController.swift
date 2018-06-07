@@ -12,7 +12,6 @@ import CoreLocation
 import CoreData
 
 class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognizerDelegate
-
 {
     
     // MARK:  Variables
@@ -44,6 +43,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     //declare the defaults...
     let defaults:UserDefaults = UserDefaults.standard
     
+    fileprivate func setupFetchedResultsController() {
+        let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
+                              NSSortDescriptor(key: "latitude", ascending: false)]
+
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        //fetchedResultsController.delegate = (self as! NSFetchedResultsControllerDelegate)
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
+    }
     
     // MARK: Life Cycle
     
@@ -87,18 +101,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         // Set the title
         title = "Virtual Tourist"
 
-        // Get the stack
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        let stack = delegate.stack
-
-        // Create a fetchrequest
-        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
-        fr.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
-                              NSSortDescriptor(key: "latitude", ascending: false)]
-
-        // Create the FetchedResultsController
-        var fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -107,25 +109,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         // Display the pin locations on the map
         displayPinLocations()
         
-//        OnTheMapClient.sharedInstance().getStudentLocations(studentLocations: studentLocations, completionHandlerForStudentLocations:
-//            { (success, studentLocations, errorString) in
-//                if success {
-//                    // Switch to Main Queue to display pins on map
-//                    DispatchQueue.main.async {
-//                        self.displayStudentLocations()
-//                    }
-//                }else {
-//                    self.displayError(errorString: errorString!)
-//                }
-//        })
     }
 
     private func displayPinLocations() {
+
+        setupFetchedResultsController()
+
         var annotations = [MKPointAnnotation]()
-        let locations = self.mapView.annotations
-        for pin in locations {
-            let lat = CLLocationDegrees(pin.coordinate.latitude)
-            let lon = CLLocationDegrees(pin.coordinate.longitude)
+        
+        for pin in fetchedResultsController.fetchedObjects! {
+            let lat = CLLocationDegrees(pin.latitude)
+            let lon = CLLocationDegrees(pin.longitude)
             
             // The lat and lon are used to create a CLLocationCoordinates2D instance.
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
@@ -133,8 +127,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
             // Here we create the annotation and set its coordiate, title, and subtitle properties
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            //annotation.title = "\(first) \(last)"
-            //annotation.subtitle = mediaURL
             
             // Finally we place the annotation in an array of annotations.
             annotations.append(annotation)
@@ -142,36 +134,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         }
             // When the array is complete, we add the annotations to the map.
             self.mapView.addAnnotations(annotations)
-            
-        
-         //var annotations = [MKPointAnnotation]()
-         //let locations =
-        
-        //            for student in locations {
-        //                // Notice that the float values are being used to create CLLocationDegree values.
-        //                // This is a version of the Double type.
-        //                let lat = CLLocationDegrees(student.latitude)
-        //                let long = CLLocationDegrees(student.longitude)
-        //
-        //                // The lat and long are used to create a CLLocationCoordinates2D instance.
-        //                let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-        //
-        //                let first = student.firstName
-        //                let last = student.lastName
-        //                let mediaURL = student.mediaURL
-        //
-        //                // Here we create the annotation and set its coordiate, title, and subtitle properties
-        //                let annotation = MKPointAnnotation()
-        //                annotation.coordinate = coordinate
-        //                annotation.title = "\(first) \(last)"
-        //                annotation.subtitle = mediaURL
-        //
-        // Finally we place the annotation in an array of annotations.
-        //                annotations.append(annotation)
-        
-        //           }
-        // When the array is complete, we add the annotations to the map.
-        //           self.mapView.addAnnotations(annotations)
     }
     
     // MARK: - MKMapViewDelegate
@@ -262,8 +224,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         print("Annotation Added to the map")
 
         // Get the stack
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        let stack = delegate.stack
+        //let delegate = UIApplication.shared.delegate as! AppDelegate
+        //let stack = delegate.stack
         
         // Create a fetchrequest
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
@@ -271,7 +233,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                               NSSortDescriptor(key: "latitude", ascending: false)]
         
         // Create the FetchedResultsController
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         
         // Get a name for the pin,
         // Then add the pin to core data
