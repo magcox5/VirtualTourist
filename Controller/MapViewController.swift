@@ -45,7 +45,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     
     fileprivate func setupFetchedResultsController() {
         let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        //let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        //fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
                               NSSortDescriptor(key: "latitude", ascending: false)]
 
@@ -64,8 +65,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Hide Delete Pins Message on ToolBar
-        
         // Set variables for detecting long press to drop pin
         let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.handleLongPress(_:)))
         lpgr.minimumPressDuration = 0.5
@@ -155,22 +154,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         return pinView
     }
     
-    
-    
-    func refreshMap(){
-        //            OnTheMapClient.sharedInstance().getStudentLocations(studentLocations: studentLocations, completionHandlerForStudentLocations:
-        //                { (success, studentLocations, errorString) in
-        //                    if success {
-        //                        // Switch to Main Queue to display pins on map
-        //                        DispatchQueue.main.async {
-        //                            self.displayStudentLocations()
-        //                        }
-        //                    }else {
-        //                        self.displayError(errorString: errorString!)
-        //                    }
-        //            })
-    }
-    
     private var mapChangedFromUserInteraction = false
     
     private func mapViewRegionDidChangeFromUserInteraction() -> Bool {
@@ -223,10 +206,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         mapView.addAnnotation(annotation)
         print("Annotation Added to the map")
 
-        // Get the stack
-        //let delegate = UIApplication.shared.delegate as! AppDelegate
-        //let stack = delegate.stack
-        
         // Create a fetchrequest
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
         fr.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
@@ -250,17 +229,25 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
             }
         }
             
-        // TODO:  Convert coordinates to a bbox string
+        // Convert coordinates to a bbox string
         vtBBox = convertCoordToBBox(latLon: newCoordinates)
         // Get photos from flickr based on pin location
-        // Store photos in Photo entity
         getFlickrPhotos(vtBBox: vtBBox)
-        
+        // Store photos in Photo entity
+
         // Pass map location to photoVC
         
         // Finally segue to collection view to display photos
         let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
         controller?.vtCoordinate = annotation.coordinate
+        controller?.vtSpan = mapView.region.span
+        present(controller!, animated: true, completion: nil)
+    }
+    
+    @objc func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        // Show photos for selected pin
+        let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
+        controller?.vtCoordinate = (view.annotation?.coordinate)!
         controller?.vtSpan = mapView.region.span
         present(controller!, animated: true, completion: nil)
     }
@@ -297,7 +284,6 @@ extension MapViewController {
         CLGeocoder().reverseGeocodeLocation(pinLoc, completionHandler: { (placemarks, error) in
             if error == nil {
                 let firstLocation = placemarks?[0]
-                //let pinName = (firstLocation?.country)! + firstLocation?.locality + firstLocation?.administrativeArea + firstLocation?.postalCode
                 let pinName = firstLocation!.country! + firstLocation!.locality! + firstLocation!.administrativeArea! + firstLocation!.postalCode!
                 completionHandler(pinName, nil)
             } else {
