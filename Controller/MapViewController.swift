@@ -20,7 +20,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     var fetchedResultsController:NSFetchedResultsController<Pin>!
 
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
-    var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
+    //var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
+    var vtSpan = MKCoordinateSpanMake(0.1, 0.1)
     var vtBBox: String = " "
 
     // MARK:  Outlets
@@ -228,11 +229,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                 print("Just created a new pin: \(np)")
             }
         }
+        try? dataController.viewContext.save()
             
         // Convert coordinates to a bbox string
         vtBBox = convertCoordToBBox(latLon: newCoordinates)
         // Get photos from flickr based on pin location
-        getFlickrPhotos(vtBBox: vtBBox)
+        FlickrClient.sharedInstance().getFlickrPhotos(vtBBox: vtBBox)
         // Store photos in Photo entity
 
         // Pass map location to photoVC
@@ -292,124 +294,11 @@ extension MapViewController {
             }
         })
     }
-    func getFlickrPhotos(vtBBox: String){
-
-        // TODO:  go to flickr with bounding box and load into photo database for that pin
-        // TODO: Set necessary parameters!
-        let methodParameters: [String: String?] =
-            [Constants.FlickrParameterKeys.SafeSearch:Constants.FlickrParameterValues.UseSafeSearch,
-             Constants.FlickrParameterKeys.BoundingBox:vtBBox,
-             Constants.FlickrParameterKeys.Per_Page:Constants.FlickrParameterValues.Per_Page,
-             Constants.FlickrParameterKeys.Extras:Constants.FlickrParameterValues.MediumURL,
-             Constants.FlickrParameterKeys.APIKey:Constants.FlickrParameterValues.APIKey,
-             Constants.FlickrParameterKeys.Method:Constants.FlickrParameterValues.SearchMethod,
-             Constants.FlickrParameterKeys.Format:Constants.FlickrParameterValues.ResponseFormat,
-             Constants.FlickrParameterKeys.NoJSONCallback:Constants.FlickrParameterValues.DisableJSONCallback]
-//        displayImageFromFlickrBySearch(methodParameters: methodParameters as [String : AnyObject])
-        
-        // create session and request
-        let session = URLSession.shared
-        let request = NSURLRequest(url: flickrURLFromParameters(parameters: methodParameters as [String : AnyObject]) as URL)
-        
-        // create network request
-        let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
-            
-            // if an error occurs, print it and re-enable the UI
-            func displayError(error: String) {
-                print(error)
-                //DispatchQueue.main.async {
-                    //self.setUIEnabled(enabled: true)
-                    //self.photoTitleLabel.text = "No photo returned. Try again."
-                    //self.photoImageView.image = nil
-                //}
-            }
-            
-            /* GUARD: Was there an error? */
-            guard (error == nil) else {
-                displayError(error: "There was an error with your request: \(String(describing: error))")
-                return
-            }
-            
-            /* GUARD: Did we get a successful 2XX response? */
-            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
-                displayError(error: "Your request returned a status code other than 2xx!")
-                return
-            }
-            
-            guard let data = data else
-            {
-                displayError(error: "No Data was returned by this request!")
-                return
-            }
-            
-            
-            // Deserialize JSON and extract necessary values
-            let parsedResult: AnyObject!
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
-            } catch
-            {
-                displayError(error: "Could not parse data the data as JSON: '\(data)'")
-                return
-            }
-            
-            /* GUARD: Did Flicker return an error (stat != ok)? */
-            guard let stat = parsedResult[Constants.FlickrResponseKeys.Status]
-                as? String, stat == Constants.FlickrResponseValues.OKStatus
-                else {
-                    displayError(error: "Flickr API returned an error.  See error code and message in \(parsedResult)")
-                    return
-            }
-            
-            if let photosDictionary =
-                parsedResult[Constants.FlickrResponseKeys.Photos] as? [String: AnyObject]
-                //                ,
-                // photoArray = photosDictionary["photo"] as? [[String: AnyObject]]
-            {
-                /* GUARD: Is "pages" key in the photosDictionary? */
-                guard let totalPages = photosDictionary[Constants.FlickrResponseKeys.Pages] as? Int else {
-                    displayError(error: "Cannot find key '\(Constants.FlickrResponseKeys.Pages)' in \(photosDictionary)")
-                    return
-                }
-                
-                // pick a random page!
-                let pageLimit = min(totalPages, 40)
-                let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
-                print("Here's my random page")
-                print(randomPage)
-                //self.displayImageFromFlickrBySearch(methodParameters: methodParameters, withPageNumber: randomPage)
-            }
-        }
-        // start the task!
-        task.resume()
-        
-        // TODO: Store photos in core data
-        print("Now to store photos in core data")
-    }
 
     func isValueInRange(value: Double, min: Double, max: Double) -> Bool {
             return !(value < min || value > max)
         }
     
-    // MARK: Helper for Creating a URL from Parameters
-    
-    private func flickrURLFromParameters(parameters: [String:AnyObject]) -> NSURL {
-        
-        let components = NSURLComponents()
-        components.scheme = Constants.Flickr.APIScheme
-        components.host = Constants.Flickr.APIHost
-        components.path = Constants.Flickr.APIPath
-        components.queryItems = [NSURLQueryItem]() as [URLQueryItem]
-        
-        for (key, value) in parameters {
-            let queryItem = NSURLQueryItem(name: key, value: "\(value)")
-            components.queryItems!.append(queryItem as URLQueryItem)
-        }
-        
-        return components.url! as NSURL
-    }
-    
-}
 //
 //extension MapViewController {
 //
@@ -423,4 +312,4 @@ extension MapViewController {
 //        }
 //    }
 //}
-
+}
