@@ -12,6 +12,8 @@ import MapKit
 
 class FlickrClient {
     
+    var dataController:DataController!
+    
     func getFlickrPhotos(vtBBox: String){
         
         // TODO:  go to flickr with bounding box and load into photo database for that pin
@@ -129,6 +131,134 @@ class FlickrClient {
         
     }
 
+    // MARK: Get Images from Random page
+    private func displayImageFromFlickrBySearch(methodParameters:  [String:AnyObject], withPageNumber: Int) {
+        
+        var methodParametersToPass: [String:AnyObject]
+        methodParametersToPass = methodParameters
+        
+        // add page parameter to methodParameters dictionary
+        methodParametersToPass[Constants.FlickrParameterKeys.Page] = "\(withPageNumber)" as AnyObject
+        
+        // create session and request
+        let session = URLSession.shared
+        let request = NSURLRequest(url: flickrURLFromParameters(parameters: methodParametersToPass) as URL)
+        
+        // create network request
+        let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
+            
+            // if an error occurs, print it and re-enable the UI
+            func displayError(error: String) {
+                print(error)
+            }
+            
+            /* GUARD: Was there an error? */
+            guard (error == nil) else {
+                displayError(error: "There was an error with your request: \(String(describing: error))")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode >= 200 && statusCode <= 299 else {
+                let error = "Your request returned a status code other than 2xx!"
+                displayError(error: error)
+                return
+            }
+            
+            guard let data = data else
+            {
+                let error = "No Data was returned by this request!"
+                displayError(error: error)
+                return
+            }
+            
+            
+            // Deserialize JSON and extract necessary values
+            let parsedResult: AnyObject!
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as AnyObject
+            } catch
+            {
+                let error = "Could not parse data the data as JSON: '\(data)'"
+                displayError(error: error)
+                return
+            }
+            /* GUARD: Did Flicker return an error (stat != ok)? */
+            guard let stat = parsedResult[Constants.FlickrResponseKeys.Status]
+                as? String, stat == Constants.FlickrResponseValues.OKStatus
+                else {
+                    let error = "Flickr API returned an error.  See error code and message in \(parsedResult)"
+                    displayError(error: error)
+                    return
+            }
+            
+            
+            guard let photosDictionary =
+                parsedResult[Constants.FlickrResponseKeys.Photos] as? [String: AnyObject] else {
+                    let error = "Cannot find key '\(Constants.FlickrResponseKeys.Photos)' in  \(parsedResult)"
+                    displayError(error: error)
+                    return
+                    
+            }
+            
+            guard let photosArray = photosDictionary["photo"] as? [[String: AnyObject]]
+                else {
+                    let error = "Cannot find key '\(Constants.FlickrResponseKeys.Photo)' in \(photosDictionary)"
+                    displayError(error: error)
+                    return
+            }
+            
+            if photosArray.count == 0 {
+                let error = "No photos found.  Search Again"
+                displayError(error: error)
+                return
+            } else {
+                //let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
+                //let photoDictionary = photosArray[randomPhotoIndex] as [String:AnyObject]
+                //let photoTitle = photoDictionary[Constants.FlickrResponseKeys.Title] as? String
+            
+                for photos in photosArray {
+                    let photoIndex = photosArray.count
+                    let photoDictionary = photosArray[photoIndex] as [String:AnyObject]
+                    let photoTitle = photoDictionary[Constants.FlickrResponseKeys.Title] as? String
+                    
+
+                    guard let imageURLString = photoDictionary[Constants.FlickrResponseKeys.MediumURL] as? String else {
+                        let error = "Cannot find key '\(Constants.FlickrResponseKeys.MediumURL)' in \(photoDictionary)"
+                        displayError(error: error)
+                        return
+                    }
+                    // if an image exists at the url, set the image and title for our app
+                    let imageURL = NSURL(string: imageURLString)
+                    if let imageData = NSData(contentsOf: imageURL! as URL) {
+                        //performUIUpdatesOnMain {
+                        //    self.setUIEnabled(enabled: true)
+                        //    self.photoImageView.image = UIImage(data: imageData as Data)
+                        //    self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
+                        //}
+                        // Add image to core database
+                        self.addPhoto(flickrFileName: imageURLString, flickrPhoto: imageData, flickrTitle: photoTitle!)
+                        
+                    } else {
+                        let error = "image does not exist at \(String(describing: imageURL))"
+                        displayError(error: error)
+                    }
+                }
+            }
+        }
+        // start the task!
+        task.resume()
+    }
+
+    func addPhoto(flickrFileName: String, flickrPhoto: NSData, flickrTitle: String) {
+        // Store fileName, Photo, and Title
+        let photo = Photo(context: dataController.viewContext)
+        photo.fileName = flickrFileName
+        photo.photo = flickrPhoto
+        photo.title = flickrTitle
+        try? dataController.viewContext.save()
+    }
+    
     // MARK: Helper for Creating a URL from Parameters
     
     private func flickrURLFromParameters(parameters: [String:AnyObject]) -> NSURL {

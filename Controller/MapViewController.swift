@@ -16,17 +16,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     
     // MARK:  Variables
     var dataController:DataController!
-    
     var fetchedResultsController:NSFetchedResultsController<Pin>!
-
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
-    //var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
     var vtSpan = MKCoordinateSpanMake(0.1, 0.1)
     var vtBBox: String = " "
 
     // MARK:  Outlets
     @IBOutlet weak var mapView: MKMapView!
-    
     @IBOutlet weak var deletePinsMsg: UIBarButtonItem!
     @IBOutlet weak var editPinMsg: UIBarButtonItem!
     @IBOutlet weak var vtToolbar: UIToolbar!
@@ -46,11 +42,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     
     fileprivate func setupFetchedResultsController() {
         let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
-        //let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
-        //fetchRequest.sortDescriptors = [sortDescriptor]
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),
-                              NSSortDescriptor(key: "latitude", ascending: false)]
-
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),NSSortDescriptor(key: "latitude", ascending: false)]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         //fetchedResultsController.delegate = (self as! NSFetchedResultsControllerDelegate)
@@ -66,38 +58,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Set variables for detecting long press to drop pin
-        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.handleLongPress(_:)))
-        lpgr.minimumPressDuration = 0.5
-        lpgr.delaysTouchesBegan = true
-        lpgr.delegate = self
-            mapView.delegate = self
-            mapView.isUserInteractionEnabled = true
-            mapView.addGestureRecognizer(lpgr)
+        setupLongPressGestureRecognizer()
+
         // Check to see if last map location saved
-        if let hasBeenOpenedBefore = UserDefaults.standard.value(forKey: "HasBeenOpenedBefore") {
+        if UserDefaults.standard.value(forKey: "HasBeenOpenedBefore") != nil {
            // If so, do nothing...
             print("Program has run before... recall last saved values")
         } else {
-            // If not, set default center and map zoom level and save to defaults...
-            print("Never run this program before... Set default values")
-            defaults.set(true, forKey: "HasBeenOpenedBefore")
-            defaults.set(37.335743, forKey: "MapLatitude")
-            defaults.set(-122.009389, forKey: "MapLongitude")
-            defaults.set(0.2, forKey: "MapLatitudeDelta")
-            defaults.set(0.2, forKey: "MapLongitudeDelta")
+            setMapDefaults()
         }
         
         // Set the region
-        var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
-        vtCoordinate = CLLocationCoordinate2D(latitude: defaults.double(forKey: "MapLatitude"), longitude: defaults.double(forKey: "MapLongitude"))
-        mapRegion.center = vtCoordinate
-        mapRegion.span.latitudeDelta = defaults.double(forKey: "MapLatitudeDelta")
-        mapRegion.span.longitudeDelta = defaults.double(forKey: "MapLongitudeDelta")
-        mapView.setRegion(mapRegion, animated: true)
-        print("Current span is: \(mapView.region.span)")
-        print("Current center is: \(mapView.region.center)")
-        
+        setMapRegion()
+
         // Set the title
         title = "Virtual Tourist"
 
@@ -298,6 +271,38 @@ extension MapViewController {
     func isValueInRange(value: Double, min: Double, max: Double) -> Bool {
             return !(value < min || value > max)
         }
+
+    func setupLongPressGestureRecognizer() {
+        // Set variables for detecting long press to drop pin
+        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.handleLongPress(_:)))
+        lpgr.minimumPressDuration = 0.5
+        lpgr.delaysTouchesBegan = true
+        lpgr.delegate = self
+        mapView.delegate = self
+        mapView.isUserInteractionEnabled = true
+        mapView.addGestureRecognizer(lpgr)
+    }
+
+    func setMapDefaults() {
+        // If not, set default center and map zoom level and save to defaults...
+        print("Never run this program before... Set default values")
+        defaults.set(true, forKey: "HasBeenOpenedBefore")
+        defaults.set(37.335743, forKey: "MapLatitude")
+        defaults.set(-122.009389, forKey: "MapLongitude")
+        defaults.set(0.2, forKey: "MapLatitudeDelta")
+        defaults.set(0.2, forKey: "MapLongitudeDelta")
+    }
+
+    func setMapRegion() {
+        var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
+        vtCoordinate = CLLocationCoordinate2D(latitude: defaults.double(forKey: "MapLatitude"), longitude: defaults.double(forKey: "MapLongitude"))
+        mapRegion.center = vtCoordinate
+        mapRegion.span.latitudeDelta = defaults.double(forKey: "MapLatitudeDelta")
+        mapRegion.span.longitudeDelta = defaults.double(forKey: "MapLongitudeDelta")
+        mapView.setRegion(mapRegion, animated: true)
+        print("Current span is: \(mapView.region.span)")
+        print("Current center is: \(mapView.region.center)")
+    }
     
 //
 //extension MapViewController {
