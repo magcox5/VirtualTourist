@@ -10,13 +10,12 @@ import Foundation
 import UIKit
 import MapKit
 
-class FlickrClient {
+//class FlickrClient {
+
+extension virtualTouristModel  {
     
-    let dataController = DataController(modelName: "VirtualTourist")
     func getFlickrPhotos(vtBBox: String){
         
-        // TODO:  go to flickr with bounding box and load into photo database for that pin
-        // TODO: Set necessary parameters!
         let methodParameters: [String: String?] =
             [Constants.FlickrParameterKeys.SafeSearch:Constants.FlickrParameterValues.UseSafeSearch,
              Constants.FlickrParameterKeys.BoundingBox:vtBBox,
@@ -237,7 +236,8 @@ class FlickrClient {
                         //    self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
                         //}
                         // Add image to core database
-                        self.addPhoto(flickrFileName: imageURLString, flickrPhoto: imageData, flickrTitle: photoTitle!)
+                        //self.addPhoto(flickrFileName: imageURLString, flickrPhoto: imageData, flickrTitle: photoTitle!)
+                        
                         
                     } else {
                         let error = "image does not exist at \(String(describing: imageURL))"
@@ -252,11 +252,11 @@ class FlickrClient {
 
     func addPhoto(flickrFileName: String, flickrPhoto: NSData, flickrTitle: String) {
         // Store fileName, Photo, and Title
-        let photo = Photo(context: dataController.viewContext)
-        photo.fileName = flickrFileName
-        photo.photo = flickrPhoto
-        photo.title = flickrTitle
-        try? dataController.viewContext.save()
+//        let photo = Photo(context: dataController.viewContext)
+        //photo.fileName = flickrFileName
+        //photo.photo = flickrPhoto
+        //photo.title = flickrTitle
+//        try? dataController.viewContext.save()
     }
     
     // MARK: Helper for Creating a URL from Parameters
@@ -279,12 +279,12 @@ class FlickrClient {
     
     // MARK: Shared Instance
     
-    class func sharedInstance() -> FlickrClient {
-        struct Singleton {
-            static var sharedInstance = FlickrClient()
-        }
-        return Singleton.sharedInstance
-    }
+ //   class func sharedInstance() -> virtualTouristModel {
+ //       struct Singleton {
+ //           static var sharedInstance = virtualTouristModel()
+ //       }
+ //       return Singleton.sharedInstance
+ //   }
     
 
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA243E47215ADE3B00549F8E /* VTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA243E46215ADE3B00549F8E /* VTModel.swift */; };
 		DA25FE5B20F6BB0100D3FA3B /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA25FE5A20F6BB0100D3FA3B /* FlickrClient.swift */; };
 		DA8803401F86E1FB000D1B93 /* Pin+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88033C1F86E1FB000D1B93 /* Pin+CoreDataClass.swift */; };
 		DA8803411F86E1FB000D1B93 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA88033D1F86E1FB000D1B93 /* Pin+CoreDataProperties.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA243E46215ADE3B00549F8E /* VTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VTModel.swift; sourceTree = "<group>"; };
 		DA25FE5A20F6BB0100D3FA3B /* FlickrClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FlickrClient.swift; path = Model/FlickrClient.swift; sourceTree = SOURCE_ROOT; };
 		DA88033C1F86E1FB000D1B93 /* Pin+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DA88033D1F86E1FB000D1B93 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				DAD13C0F1FCCDBBC009B2AEF /* Constants.swift */,
 				DAF6B09320C1FC4A0033A2A9 /* DataController.swift */,
 				DA25FE5A20F6BB0100D3FA3B /* FlickrClient.swift */,
+				DA243E46215ADE3B00549F8E /* VTModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				DA8803411F86E1FB000D1B93 /* Pin+CoreDataProperties.swift in Sources */,
 				DA8803401F86E1FB000D1B93 /* Pin+CoreDataClass.swift in Sources */,
 				DAF7C15F1F9002CA009F850A /* CoreDataStack.swift in Sources */,
+				DA243E47215ADE3B00549F8E /* VTModel.swift in Sources */,
 				DA9681701FA81C52007A3687 /* CoreDataTableViewController.swift in Sources */,
 				DAF6B09420C1FC4A0033A2A9 /* DataController.swift in Sources */,
 				DAD13C101FCCDBBC009B2AEF /* Constants.swift in Sources */,

@@ -18,7 +18,9 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 //class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapViewDelegate {
     
     // MARK:  - Variables
-    var _fetchedResultsController: NSFetchedResultsController<Pin>? = nil
+    var _fetchedResultsController: NSFetchedResultsController<Photo>? = nil
+    var dataController: DataController!
+    var blockOperations: [BlockOperation] = []
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
     var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
     var vtBBox = ""
@@ -62,8 +64,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
         // get flickr photos if this is a new pin
         if newPin {
-            let thesePhotos = FlickrClient.sharedInstance()
-            thesePhotos.getFlickrPhotos(vtBBox: vtBBox)
+            virtualTouristModel.sharedInstance().getFlickrPhotos(vtBBox: vtBBox)
         }
 
         // Register cell classes
