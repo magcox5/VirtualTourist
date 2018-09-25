@@ -12,8 +12,7 @@ import MapKit
 
 class FlickrClient {
     
-    var dataController:DataController!
-    
+    let dataController = DataController(modelName: "VirtualTourist")
     func getFlickrPhotos(vtBBox: String){
         
         // TODO:  go to flickr with bounding box and load into photo database for that pin
@@ -27,7 +26,7 @@ class FlickrClient {
              Constants.FlickrParameterKeys.Method:Constants.FlickrParameterValues.SearchMethod,
              Constants.FlickrParameterKeys.Format:Constants.FlickrParameterValues.ResponseFormat,
              Constants.FlickrParameterKeys.NoJSONCallback:Constants.FlickrParameterValues.DisableJSONCallback]
-        //        displayImageFromFlickrBySearch(methodParameters: methodParameters as [String : AnyObject])
+//        displayImageFromFlickrBySearch(methodParameters: methodParameters as [String : AnyObject], withPageNumber: <#Int#>)
         
         // create session and request
         let session = URLSession.shared
@@ -100,6 +99,9 @@ class FlickrClient {
                 print("Here's my random page")
                 print(randomPage)
                 
+                self.displayImageFromFlickrBySearch(methodParameters: methodParameters as [String : AnyObject], withPageNumber: randomPage)
+
+                
                 //Store photos in core data
                 // for each photo in photosDictionary[randompage]
                 // if an image exists at the url, set the image and title for our app
@@ -120,10 +122,7 @@ class FlickrClient {
                 //  title: photosDictionary[randomPage].title as String
                 //let np = Pin(latitude: newCoordinates.latitude as Double,
                 //             context: fetchedResultsController.managedObjectContext)
-                print("Just added photos")
-                
-                
-                
+                // print("Just added photos")
             }
         }
         // start the task!
@@ -198,7 +197,6 @@ class FlickrClient {
                     let error = "Cannot find key '\(Constants.FlickrResponseKeys.Photos)' in  \(parsedResult)"
                     displayError(error: error)
                     return
-                    
             }
             
             guard let photosArray = photosDictionary["photo"] as? [[String: AnyObject]]
@@ -217,9 +215,11 @@ class FlickrClient {
                 //let photoDictionary = photosArray[randomPhotoIndex] as [String:AnyObject]
                 //let photoTitle = photoDictionary[Constants.FlickrResponseKeys.Title] as? String
             
-                for photos in photosArray {
-                    let photoIndex = photosArray.count
-                    let photoDictionary = photosArray[photoIndex] as [String:AnyObject]
+                let photoIndex = photosArray.count
+                print("The photoIndex is:  ", photoIndex)
+                for i in 0...photoIndex-1 {
+                    
+                    let photoDictionary = photosArray[i] as [String:AnyObject]
                     let photoTitle = photoDictionary[Constants.FlickrResponseKeys.Title] as? String
                     
 

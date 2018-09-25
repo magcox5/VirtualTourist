@@ -11,7 +11,47 @@ import CoreData
 
 // MARK: - CoreDataCollectionViewController: UICollectionViewController
 
-class CoreDataCollectionViewController: UICollectionViewController, NSFetchedResultsControllerDelegate {
+class CoreDataCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, NSFetchedResultsControllerDelegate
+{
+    // MARK: Variables
+    private let reuseIdentifier = "Cell"
+    @IBOutlet var collectionView: UICollectionView!
+
+    // MARK: UICollectionViewDataSource
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if let fc = _fetchedResultsController {
+            return (fc.sections?.count)!
+        } else {
+            return 0
+        }
+        
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let fc = _fetchedResultsController {
+            return (fc.sections![section].numberOfObjects)
+        } else {
+            return 0
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        cell.backgroundColor = UIColor.white
+        return cell
+    }
+
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        <#code#>
+//    }
+    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+ //       <#code#>
+ //   }
+    
+//class CoreDataCollectionViewController: UICollectionViewController, NSFetchedResultsControllerDelegate {
 
     var _fetchedResultsController: NSFetchedResultsController<Pin>? = nil
     var blockOperations: [BlockOperation] = []

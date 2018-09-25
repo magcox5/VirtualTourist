@@ -15,14 +15,15 @@ private let reuseIdentifier = "Cell"
 class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
     MKMapViewDelegate,
     NSFetchedResultsControllerDelegate {
+//class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapViewDelegate {
     
     // MARK:  - Variables
     var _fetchedResultsController: NSFetchedResultsController<Pin>? = nil
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
     var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
+    var vtBBox = ""
+    var newPin = true
     
-//class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapViewDelegate {
-
     // MARK: - Outlets
     
     @IBOutlet weak var pinWithoutPhotos: UILabel!
@@ -45,7 +46,8 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        pinWithoutPhotos.isHidden = false
+        //pinWithoutPhotos.isHidden = false
+        pinWithoutPhotos.isHidden = true
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -58,7 +60,12 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         annotation.coordinate = vtCoordinate
         mapView.addAnnotation(annotation)
 
-        
+        // get flickr photos if this is a new pin
+        if newPin {
+            let thesePhotos = FlickrClient.sharedInstance()
+            thesePhotos.getFlickrPhotos(vtBBox: vtBBox)
+        }
+
         // Register cell classes
         collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView?.delegate = self

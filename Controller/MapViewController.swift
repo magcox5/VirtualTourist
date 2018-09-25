@@ -20,6 +20,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
     var vtSpan = MKCoordinateSpanMake(0.1, 0.1)
     var vtBBox: String = " "
+    var newPin: Bool = true
 
     // MARK:  Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -207,7 +208,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         // Convert coordinates to a bbox string
         vtBBox = convertCoordToBBox(latLon: newCoordinates)
         // Get photos from flickr based on pin location
-        FlickrClient.sharedInstance().getFlickrPhotos(vtBBox: vtBBox)
+        //FlickrClient.sharedInstance().getFlickrPhotos(vtBBox: vtBBox)
+        //let thesePhotos = FlickrClient.sharedInstance()
+        //thesePhotos.getFlickrPhotos(vtBBox: vtBBox)
         // Store photos in Photo entity
 
         // Pass map location to photoVC
@@ -216,6 +219,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
         controller?.vtCoordinate = annotation.coordinate
         controller?.vtSpan = mapView.region.span
+        controller?.newPin = false
         present(controller!, animated: true, completion: nil)
     }
     
@@ -224,6 +228,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
         controller?.vtCoordinate = (view.annotation?.coordinate)!
         controller?.vtSpan = mapView.region.span
+        controller?.vtBBox = vtBBox
         present(controller!, animated: true, completion: nil)
     }
 }
