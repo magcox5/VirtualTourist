@@ -7,8 +7,8 @@
 //
 
 import UIKit
-//import CoreData
-//import Foundation
+import CoreData
+import Foundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

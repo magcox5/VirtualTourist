@@ -15,11 +15,11 @@ private let reuseIdentifier = "Cell"
 class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
     MKMapViewDelegate,
     NSFetchedResultsControllerDelegate {
-//class PhotoCollectionViewController: CoreDataCollectionViewController, MKMapViewDelegate {
     
     // MARK:  - Variables
-    var _fetchedResultsController: NSFetchedResultsController<Photo>? = nil
-    var dataController: DataController!
+    var _fetchedResultsController: NSFetchedResultsController<Photo>!
+    let dataController = DataController(modelName: "VirtualTourist")
+//    var dataController: DataController!
     var blockOperations: [BlockOperation] = []
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
     var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
@@ -45,9 +45,20 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         //TODO:  refresh photos in collection
     }
     
+    fileprivate func setupFetchedResultsController() {
+        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "fileName", ascending: true)]
+        _fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        do {
+            try _fetchedResultsController.performFetch()
+        } catch {
+            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setupFetchedResultsController()
         //pinWithoutPhotos.isHidden = false
         pinWithoutPhotos.isHidden = true
 
@@ -64,7 +75,26 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
         // get flickr photos if this is a new pin
         if newPin {
-            virtualTouristModel.sharedInstance().getFlickrPhotos(vtBBox: vtBBox)
+            virtualTouristModel.sharedInstance().getFlickrPhotos(vtBBox: vtBBox) {(success, error, data, photoCount) in
+                if success {
+                    DispatchQueue.main.async {
+                        for i in 0...photoCount - 1 {
+                            if data[i]["Title"] != nil {
+                                let photo = Photo(context: self.dataController.viewContext)
+                                photo.photo = data[i]["Photo"] as? NSData
+                                photo.fileName = data[i]["FileName"] as? String
+                                photo.title = data[i]["Title"] as? String
+                            }
+                        }
+                        try? self.dataController.viewContext.save()
+                    }
+                } else {
+                    let alert = UIAlertController(title: "Error", message: "", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title:NSLocalizedString("Ok", comment: "Default Action"), style: .default))
+                    alert.message = error!
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
         }
 
         // Register cell classes

@@ -189,7 +189,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         // Create the FetchedResultsController
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         
-        // Get a name for the pin,
+        // Create a name for the pin using location data,
         // Then add the pin to core data
 
         getPinName(coordinates: newCoordinates) { pinName, error in
@@ -219,7 +219,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
         controller?.vtCoordinate = annotation.coordinate
         controller?.vtSpan = mapView.region.span
-        controller?.newPin = false
+        controller?.newPin = true
         present(controller!, animated: true, completion: nil)
     }
     
@@ -229,6 +229,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         controller?.vtCoordinate = (view.annotation?.coordinate)!
         controller?.vtSpan = mapView.region.span
         controller?.vtBBox = vtBBox
+        controller?.newPin = false
         present(controller!, animated: true, completion: nil)
     }
 }
