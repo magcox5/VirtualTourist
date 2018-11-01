@@ -18,13 +18,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="fOn-iL-JZv">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="fOn-iL-JZv">
                                 <rect key="frame" x="0.0" y="64" width="375" height="559"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </mapView>
-                            <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WFG-iO-5EE">
+                            <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WFG-iO-5EE">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="xRR-5Y-7uw"/>
                                     <barButtonItem title="Tap Pins To Delete" id="qG8-0k-WoW" userLabel="Tap Pins To Delete"/>
@@ -33,6 +31,16 @@
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="WFG-iO-5EE" firstAttribute="bottom" secondItem="XUp-MA-aan" secondAttribute="bottom" id="0YB-8q-0e2"/>
+                            <constraint firstItem="WFG-iO-5EE" firstAttribute="top" secondItem="fOn-iL-JZv" secondAttribute="bottom" id="9WB-X9-sIg"/>
+                            <constraint firstItem="WFG-iO-5EE" firstAttribute="top" secondItem="fOn-iL-JZv" secondAttribute="bottom" id="BHQ-H2-LmA"/>
+                            <constraint firstItem="WFG-iO-5EE" firstAttribute="leading" secondItem="XUp-MA-aan" secondAttribute="leading" id="RAR-Hr-MMI"/>
+                            <constraint firstItem="fOn-iL-JZv" firstAttribute="trailing" secondItem="XUp-MA-aan" secondAttribute="trailing" id="eQU-xY-Ekh"/>
+                            <constraint firstItem="fOn-iL-JZv" firstAttribute="top" secondItem="XUp-MA-aan" secondAttribute="top" id="mRl-HZ-BHo"/>
+                            <constraint firstItem="fOn-iL-JZv" firstAttribute="leading" secondItem="XUp-MA-aan" secondAttribute="leading" id="q5Q-nl-QU6"/>
+                            <constraint firstItem="WFG-iO-5EE" firstAttribute="trailing" secondItem="XUp-MA-aan" secondAttribute="trailing" id="v2J-3G-O1b"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="XUp-MA-aan"/>
                     </view>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="jCc-aL-xzh">
@@ -82,27 +90,6 @@
                                 <rect key="frame" x="0.0" y="173" width="375" height="450"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="c6q-ip-CJ2">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="428"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="kPs-re-jnb">
-                                            <size key="itemSize" width="200" height="200"/>
-                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        </collectionViewFlowLayout>
-                                        <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" reuseIdentifier="PhotoCell" id="xRo-L0-nj6">
-                                                <rect key="frame" x="87.5" y="0.0" width="200" height="200"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                </view>
-                                            </collectionViewCell>
-                                        </cells>
-                                    </collectionView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="No Photos For This Location" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNe-69-heT">
                                         <rect key="frame" x="0.0" y="11" width="375" height="37"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -110,6 +97,36 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="V7K-tU-LMw" userLabel="PhotoCollectionView">
+                                        <rect key="frame" x="8" y="0.0" width="367" height="468"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Efw-2u-DwY">
+                                            <size key="itemSize" width="100" height="100"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photoCell" id="kd8-tr-g1d" userLabel="photoCell" customClass="PhotoCell" customModule="VirtualTourist" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kgH-IH-2eK" userLabel="photoImage">
+                                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                </view>
+                                                <connections>
+                                                    <outlet property="photoImage" destination="kgH-IH-2eK" id="r6u-Nc-ksw"/>
+                                                </connections>
+                                            </collectionViewCell>
+                                        </cells>
+                                    </collectionView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <viewLayoutGuide key="safeArea" id="GrJ-TN-PJc"/>
@@ -132,10 +149,10 @@
                         <viewLayoutGuide key="safeArea" id="uie-5H-BRU"/>
                     </view>
                     <connections>
-                        <outlet property="collectionView" destination="c6q-ip-CJ2" id="HdX-oo-G6y"/>
                         <outlet property="mapView" destination="VuN-Dm-rud" id="HNc-xe-Fzd"/>
                         <outlet property="newCollection" destination="cOJ-mN-U8h" id="Uk9-zB-Yb5"/>
                         <outlet property="okButton" destination="VDq-HW-r0J" id="jo5-ip-5IT"/>
+                        <outlet property="photoCollectionView" destination="V7K-tU-LMw" id="ueb-h9-uFT"/>
                         <outlet property="pinWithoutPhotos" destination="yNe-69-heT" id="y63-ST-ade"/>
                     </connections>
                 </viewController>

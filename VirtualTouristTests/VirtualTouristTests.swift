@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import VirtualTourist
+//@testable import VirtualTourist
 
 class VirtualTouristTests: XCTestCase {
     

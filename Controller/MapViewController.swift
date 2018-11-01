@@ -21,6 +21,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     var vtSpan = MKCoordinateSpanMake(0.1, 0.1)
     var vtBBox: String = " "
     var newPin: Bool = true
+    var currentPin: Pin!
 
     // MARK:  Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -201,25 +202,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                              startingPhotoNumber: 1,
                              context: fetchedResultsController.managedObjectContext)
                 print("Just created a new pin: \(np)")
+               self.currentPin = np
             }
         }
         try? dataController.viewContext.save()
             
         // Convert coordinates to a bbox string
         vtBBox = convertCoordToBBox(latLon: newCoordinates)
-        // Get photos from flickr based on pin location
-        //FlickrClient.sharedInstance().getFlickrPhotos(vtBBox: vtBBox)
-        //let thesePhotos = FlickrClient.sharedInstance()
-        //thesePhotos.getFlickrPhotos(vtBBox: vtBBox)
-        // Store photos in Photo entity
 
-        // Pass map location to photoVC
-        
-        // Finally segue to collection view to display photos
+        // Segue to collection view to display photos
         let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
         controller?.vtCoordinate = annotation.coordinate
         controller?.vtSpan = mapView.region.span
         controller?.newPin = true
+        controller?.pin = currentPin
+        controller?.dataController = dataController
         present(controller!, animated: true, completion: nil)
     }
     
@@ -230,8 +227,24 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         controller?.vtSpan = mapView.region.span
         controller?.vtBBox = vtBBox
         controller?.newPin = false
-        present(controller!, animated: true, completion: nil)
-    }
+        controller?.dataController = dataController
+
+      // Go through pin database to find selected pin, then pass to next controller
+      let selectedAnnotation = view.annotation
+      let selectedAnnotationLat = selectedAnnotation?.coordinate.latitude
+      let selectedAnnotationLong = selectedAnnotation?.coordinate.longitude
+      var selectedPin: Pin
+      if let result = fetchedResultsController.fetchedObjects {
+         for pin in result {
+            if pin.latitude == selectedAnnotationLat && pin.longitude == selectedAnnotationLong {
+               selectedPin = pin
+               controller?.pin = selectedPin
+               present(controller!, animated: true, completion: nil)
+               break
+               }
+            }
+         }
+   }
 }
 extension MapViewController {
     func convertCoordToBBox(latLon: CLLocationCoordinate2D) -> String {
