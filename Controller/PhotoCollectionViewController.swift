@@ -10,8 +10,6 @@ import UIKit
 import MapKit
 import CoreData
 
-// private let reuseIdentifier = "Cell"
-
 class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
     MKMapViewDelegate,
     NSFetchedResultsControllerDelegate {
@@ -28,7 +26,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     var newPin = true
 
     // MARK: - Properties
-    fileprivate let reuseIdentifier = "Cell"
+    fileprivate let reuseIdentifier = "photoCell"
     fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     fileprivate let itemsPerRow: CGFloat = 3
 
@@ -171,7 +169,8 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         
         // Configure cell
         print("The photo we're looking at is ", aPhoto.fileName! as Any)
-        cell.photoImage.image = UIImage(data: aPhoto.photo! as Data)
+        let vtImage = UIImage(data: aPhoto.photo! as Data)
+        cell.photoImage.image = vtImage
         return cell
     }
 
