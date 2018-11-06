@@ -101,9 +101,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         setupFetchedResultsController()
         pinWithoutPhotos.isHidden = false
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         // Set the region
         var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
         mapRegion.center = vtCoordinate

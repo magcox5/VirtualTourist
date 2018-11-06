@@ -70,7 +70,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="VuN-Dm-rud">
-                                <rect key="frame" x="0.0" y="74" width="375" height="97"/>
+                                <rect key="frame" x="0.0" y="74" width="375" height="93"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="93" id="TTN-vd-Yht"/>
+                                </constraints>
                             </mapView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cOJ-mN-U8h">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
@@ -85,16 +88,10 @@
                                 </items>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K7n-yS-Yro">
-                                <rect key="frame" x="0.0" y="173" width="375" height="450"/>
+                                <rect key="frame" x="0.0" y="169" width="375" height="454"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Photos For This Location" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNe-69-heT">
-                                        <rect key="frame" x="0.0" y="11" width="375" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="V7K-tU-LMw" userLabel="PhotoCollectionView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="436"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="440"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Efw-2u-DwY">
                                             <size key="itemSize" width="100" height="100"/>
@@ -102,6 +99,13 @@
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
+                                        <label key="backgroundView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Photos For This Location" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="q9H-S1-j6i" userLabel="pinWithoutPhotos">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="441"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photoCell" id="kd8-tr-g1d" userLabel="photoCell" customClass="PhotoCell" customModule="VirtualTourist" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
@@ -132,12 +136,8 @@
                                 <constraints>
                                     <constraint firstItem="V7K-tU-LMw" firstAttribute="top" secondItem="GrJ-TN-PJc" secondAttribute="top" id="A9B-Kl-hGg"/>
                                     <constraint firstItem="GrJ-TN-PJc" firstAttribute="bottom" secondItem="V7K-tU-LMw" secondAttribute="bottom" constant="14" id="Ruv-uf-18z"/>
-                                    <constraint firstItem="GrJ-TN-PJc" firstAttribute="bottom" secondItem="yNe-69-heT" secondAttribute="bottom" constant="418" id="SPb-m0-K1z"/>
-                                    <constraint firstItem="V7K-tU-LMw" firstAttribute="leading" secondItem="yNe-69-heT" secondAttribute="leading" id="Seo-lr-Gty"/>
                                     <constraint firstItem="V7K-tU-LMw" firstAttribute="leading" secondItem="K7n-yS-Yro" secondAttribute="leading" id="cY0-9b-Qsl"/>
-                                    <constraint firstItem="V7K-tU-LMw" firstAttribute="trailing" secondItem="yNe-69-heT" secondAttribute="trailing" id="euC-h1-3S6"/>
                                     <constraint firstAttribute="trailing" secondItem="V7K-tU-LMw" secondAttribute="trailing" id="frJ-IV-FqY"/>
-                                    <constraint firstItem="yNe-69-heT" firstAttribute="top" secondItem="GrJ-TN-PJc" secondAttribute="top" constant="11" id="g4Z-4e-XBJ"/>
                                 </constraints>
                                 <viewLayoutGuide key="safeArea" id="GrJ-TN-PJc"/>
                             </view>
@@ -162,7 +162,11 @@
                             <constraint firstItem="VuN-Dm-rud" firstAttribute="top" secondItem="kWE-38-bKr" secondAttribute="bottom" id="Iyd-Yb-46O"/>
                             <constraint firstItem="K7n-yS-Yro" firstAttribute="top" secondItem="VuN-Dm-rud" secondAttribute="bottom" constant="2" id="JwK-Ow-4q0"/>
                             <constraint firstItem="VuN-Dm-rud" firstAttribute="trailing" secondItem="K7n-yS-Yro" secondAttribute="trailing" id="O0D-n3-QuT"/>
+                            <constraint firstItem="VuN-Dm-rud" firstAttribute="leading" secondItem="uie-5H-BRU" secondAttribute="leading" id="PHI-YE-odK"/>
+                            <constraint firstItem="VuN-Dm-rud" firstAttribute="trailing" secondItem="uie-5H-BRU" secondAttribute="trailing" id="Qpm-3W-WUa"/>
+                            <constraint firstItem="K7n-yS-Yro" firstAttribute="top" secondItem="VuN-Dm-rud" secondAttribute="bottom" constant="2.5" id="RTD-xq-mQm"/>
                             <constraint firstItem="K7n-yS-Yro" firstAttribute="trailing" secondItem="cOJ-mN-U8h" secondAttribute="trailing" id="Spf-7S-Xua"/>
+                            <constraint firstItem="VuN-Dm-rud" firstAttribute="top" secondItem="kWE-38-bKr" secondAttribute="bottom" id="SsU-wA-fJK"/>
                             <constraint firstItem="kWE-38-bKr" firstAttribute="leading" secondItem="VuN-Dm-rud" secondAttribute="leading" id="b01-Xh-SLW"/>
                             <constraint firstItem="VuN-Dm-rud" firstAttribute="leading" secondItem="K7n-yS-Yro" secondAttribute="leading" id="e4y-jk-33Z"/>
                             <constraint firstAttribute="trailing" secondItem="kWE-38-bKr" secondAttribute="trailing" id="g09-L6-Pxc"/>
@@ -177,7 +181,7 @@
                         <outlet property="newCollection" destination="cOJ-mN-U8h" id="Uk9-zB-Yb5"/>
                         <outlet property="okButton" destination="VDq-HW-r0J" id="jo5-ip-5IT"/>
                         <outlet property="photoCollectionView" destination="V7K-tU-LMw" id="ueb-h9-uFT"/>
-                        <outlet property="pinWithoutPhotos" destination="yNe-69-heT" id="y63-ST-ade"/>
+                        <outlet property="pinWithoutPhotos" destination="q9H-S1-j6i" id="Yhz-6q-71M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kxE-6d-73I" userLabel="First Responder" sceneMemberID="firstResponder"/>
