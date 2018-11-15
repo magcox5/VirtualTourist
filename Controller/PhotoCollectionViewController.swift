@@ -11,19 +11,19 @@ import MapKit
 import CoreData
 
 class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
-    MKMapViewDelegate,
-    NSFetchedResultsControllerDelegate {
+    MKMapViewDelegate {
     
     // MARK:  - Variables
-    var pin: Pin!
+    var currentPin: Pin!
     var fetchedResultsController: NSFetchedResultsController<Photo>!
 //    let dataController = DataController(modelName: "VirtualTourist")
     var dataController: DataController!
-    var blockOperations: [BlockOperation] = []
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
     var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
     var vtBBox = ""
     var newPin = true
+    var photoCount: Int = 0
+    var pinPhotos: [Photo] = []
 
     // MARK: - Properties
     fileprivate let reuseIdentifier = "photoCell"
@@ -46,44 +46,28 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     }
     
     @IBAction func newCollection(_ sender: Any) {
+        // Delete current photos in coredata and array, then reload new ones
+        for photo in self.pinPhotos {
+            dataController.viewContext.delete(photo)
+        }
+        self.pinPhotos = []
         getNewPhotos()
-        photoCollectionView.reloadData()
+        try? dataController.viewContext.save()
     }
     
-    fileprivate func setupFetchedResultsController() {
-        let fetchRequest:NSFetchRequest<Photo> = Photo.fetchRequest()
-        
-        if let pin = pin {
-            let predicate = NSPredicate(format: "pin == %@", pin)
-            fetchRequest.predicate = predicate
-        }
-        
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "fileName", ascending: true)]
-        
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            fatalError("The fetch could not be performed: \(error.localizedDescription)")
-        }
-        
-        fetchedResultsController.delegate = self
-    }
+    
     
     fileprivate func getNewPhotos() {
- virtualTouristModel.sharedInstance().getFlickrPhotos(vtBBox: vtBBox) {(success, error, data, photoCount) in
+ virtualTouristModel.sharedInstance().getFlickrPhotos(vtBBox: vtBBox) {(success, error, data, imageCount) in
             if success {
                 DispatchQueue.main.async {
                     self.pinWithoutPhotos.isHidden = true
-                    for i in 0...photoCount - 1 {
-                        if data[i]["Title"] != nil {
-                            print(i, data[i]["Title"]!,data[i]["FileName"]! )
+                    for i in 0...imageCount - 1 {
                             let photo = Photo(context: self.dataController.viewContext)
-                            photo.photo = data[i]["Photo"] as? NSData
                             photo.fileName = data[i]["FileName"] as? String
                             photo.title = data[i]["Title"] as? String
-                        }
+                            self.currentPin.addToPhotos(photo)
+                            self.pinPhotos.append(photo)
                     }
                     try? self.dataController.viewContext.save()
                 }
@@ -98,7 +82,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupFetchedResultsController()
         pinWithoutPhotos.isHidden = false
 
         // Set the region
@@ -112,33 +95,61 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         // get flickr photos if this is a new pin
         if newPin {
             getNewPhotos()
+            try? dataController.viewContext.save()
+        } else {
+            reloadPhotos()
         }
 
         // Register cell classes
-        photoCollectionView!.register(PhotoCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        photoCollectionView?.delegate = self
-        photoCollectionView?.dataSource = self
+        //photoCollectionView!.register(PhotoCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        //photoCollectionView?.delegate = self
+        //photoCollectionView?.dataSource = self
 
         // Do any additional setup after loading the view.
         mapView.centerCoordinate = vtCoordinate
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    fileprivate func reloadPhotos() {
+        DispatchQueue.main.async {
+            let photoFetchRequest = self.createPhotoFetchRequest() as NSFetchRequest<Photo>
+            self.pinPhotos = try! self.dataController.viewContext.fetch(photoFetchRequest) as [Photo]
+            self.photoCount = self.pinPhotos.count
+            self.photoCollectionView.reloadData()
+        }
+    }
+    
+    fileprivate func createPhotoFetchRequest() -> NSFetchRequest<Photo> {
+        let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
+        let predicate = NSPredicate(format: "pin == %@", currentPin)
+        fetchRequest.predicate = predicate
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        return fetchRequest
+    }
+    
+    //function for loading images that are stored or that are being downloaded
+    private func downloadImage(using cell: PhotoCell, photo: Photo, collectionView: UICollectionView, index: IndexPath) {
+        if let imageData = photo.photo {
+            DispatchQueue.main.async {
+                cell.photoImage.image = UIImage(data: Data(referencing: imageData as NSData))
+            }
+        } else {
+            if let imageUrl = URL(string: photo.fileName!) {
+                do {
+                    let imageData = try Data(contentsOf: imageUrl)
+                    let image = UIImage(data: imageData)
+                    DispatchQueue.main.async {
+                        cell.photoImage.image = image
+                    }
+                    photo.photo = imageData as NSData
+                } catch{
+                    print("failed to download image from URL")
+                }
+            }
+        }
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
     // MARK: UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -150,7 +161,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
     }
 
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let fc = fetchedResultsController {
             return (fc.sections![section].numberOfObjects)
@@ -161,77 +171,17 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
-        let aPhoto = fetchedResultsController.object(at: indexPath)
         cell.backgroundColor = UIColor.white
         
-        // Configure cell
-        print("The photo we're looking at is ", aPhoto.fileName! as Any)
-        let vtImage = UIImage(data: aPhoto.photo! as Data)
-        cell.photoImage.image = vtImage
-        return cell
-    }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
-}
-
-extension PhotoCollectionViewController {
-    
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        blockOperations.removeAll(keepingCapacity: false)
-    }
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-            photoCollectionView.performBatchUpdates ({
-                for operation in self.blockOperations {
-                    operation.start()
-                }
-            }, completion: {(completed) in
-            
-            })
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-            case .insert:
-            blockOperations.append(BlockOperation(block: {
-                self.photoCollectionView.insertItems(at: [newIndexPath!])
-            }))
-            case .delete:
-            blockOperations.append(BlockOperation(block: {
-                self.photoCollectionView.deleteItems(at: [indexPath!])
-            }))
-        default:
-            break
+        DispatchQueue.main.async {
+            cell.photoImage.image = nil
         }
+        
+        let photo = self.pinPhotos[indexPath.row]
+        downloadImage(using: cell, photo: photo, collectionView: collectionView, index: indexPath)
+        return cell
+
     }
+
 }
+

@@ -194,34 +194,38 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         // Then add the pin to core data
 
         getPinName(coordinates: newCoordinates) { pinName, error in
-            guard let pinName = pinName, error == nil else {return}
-            DispatchQueue.main.async {
-                let np = Pin(latitude: newCoordinates.latitude as Double,
+         guard let pinName = pinName else {return}
+                  let np = Pin(latitude: newCoordinates.latitude as Double,
                              longitude: newCoordinates.longitude as Double,
                              name: pinName,
                              startingPhotoNumber: 1,
                              context: fetchedResultsController.managedObjectContext)
-                print("Just created a new pin: \(np)")
-               self.currentPin = np
-            }
-        }
-        try? dataController.viewContext.save()
-            
-        // Convert coordinates to a bbox string
-        vtBBox = convertCoordToBBox(latLon: newCoordinates)
-
-        // Segue to collection view to display photos
-        let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
-        controller?.vtCoordinate = annotation.coordinate
-        controller?.vtSpan = mapView.region.span
-        controller?.newPin = true
-        controller?.pin = currentPin
-        controller?.dataController = dataController
-        present(controller!, animated: true, completion: nil)
+                  try? self.dataController.viewContext.save()
+                  print("Just created a new pin: \(np)")
+                  self.currentPin = np
+         // Convert coordinates to a bbox string
+         self.vtBBox = self.convertCoordToBBox(latLon: newCoordinates)
+         
+         // Segue to collection view to display photos
+         let controller = self.storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
+         controller?.vtCoordinate = annotation.coordinate
+         controller?.vtSpan = self.mapView.region.span
+         controller?.newPin = true
+         controller?.currentPin = self.currentPin
+         controller?.dataController = self.dataController
+         controller?.vtBBox = self.vtBBox
+         self.present(controller!, animated: true, completion: nil)
+      }
+      
     }
     
     @objc func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        // Show photos for selected pin
+      // Get coordinates for selected pin
+      let annotation = view.annotation as! MKPointAnnotation
+      print("The latitude is: ", annotation.coordinate.latitude)
+      print("The longitude is: ", annotation.coordinate.longitude)
+      vtBBox = convertCoordToBBox(latLon: annotation.coordinate)
+      // Show photos for selected pin
         let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
         controller?.vtCoordinate = (view.annotation?.coordinate)!
         controller?.vtSpan = mapView.region.span
@@ -238,7 +242,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
          for pin in result {
             if pin.latitude == selectedAnnotationLat && pin.longitude == selectedAnnotationLong {
                selectedPin = pin
-               controller?.pin = selectedPin
+               controller?.currentPin = selectedPin
                present(controller!, animated: true, completion: nil)
                break
                }
