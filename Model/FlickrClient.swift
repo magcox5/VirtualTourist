@@ -66,7 +66,7 @@ extension virtualTouristModel  {
             guard let stat = parsedResult[Constants.FlickrResponseKeys.Status]
                 as? String, stat == Constants.FlickrResponseValues.OKStatus
                 else {
-                    completionHandler(false, "Flickr API returned an error.  See error code and message in \(parsedResult)", [[:]], 0)
+                    completionHandler(false, "Flickr API returned an error.  See error code and message in \(String(describing: parsedResult))", [[:]], 0)
                     return
             }
             
@@ -155,14 +155,14 @@ extension virtualTouristModel  {
             guard let stat = parsedResult[Constants.FlickrResponseKeys.Status]
                 as? String, stat == Constants.FlickrResponseValues.OKStatus
                 else {
-                    completionHandler(false, "Flickr API returned an error.  See error code and message in \(parsedResult)", [[:]], 0)
+                    completionHandler(false, "Flickr API returned an error.  See error code and message in \(String(describing: parsedResult))", [[:]], 0)
                     return
             }
             
             
             guard let photosDictionary =
                 parsedResult[Constants.FlickrResponseKeys.Photos] as? [String: AnyObject] else {
-                    completionHandler(false, "Cannot find key '\(Constants.FlickrResponseKeys.Photos)' in  \(parsedResult)", [[:]], 0)
+                    completionHandler(false, "Cannot find key '\(Constants.FlickrResponseKeys.Photos)' in  \(String(describing: parsedResult))", [[:]], 0)
                     return
             }
             

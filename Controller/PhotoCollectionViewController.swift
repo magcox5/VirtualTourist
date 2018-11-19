@@ -10,8 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
-    MKMapViewDelegate {
+class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,MKMapViewDelegate {
     
     // MARK:  - Variables
     var currentPin: Pin!
@@ -23,6 +22,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     var vtBBox = ""
     var newPin = true
     var photoCount: Int = 0
+    let itemSpacing: CGFloat = 9.0
     var pinPhotos: [Photo] = []
 
     // MARK: - Properties
@@ -100,11 +100,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
             reloadPhotos()
         }
 
-        // Register cell classes
-        //photoCollectionView!.register(PhotoCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        //photoCollectionView?.delegate = self
-        //photoCollectionView?.dataSource = self
-
         // Do any additional setup after loading the view.
         mapView.centerCoordinate = vtCoordinate
         
@@ -152,21 +147,17 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     
     // MARK: UICollectionViewDataSource
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if let fc = fetchedResultsController {
-            return (fc.sections?.count)!
-        } else {
-            return 0
-        }
-
-    }
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let fc = fetchedResultsController {
-            return (fc.sections![section].numberOfObjects)
+        if self.photoCount > 0 {
+            DispatchQueue.main.async {
+                self.pinWithoutPhotos.isHidden = true
+            }
         } else {
-            return 0
+            DispatchQueue.main.async {
+                self.pinWithoutPhotos.isHidden = false
+            }
         }
+        return self.photoCount
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -179,8 +170,16 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         
         let photo = self.pinPhotos[indexPath.row]
         downloadImage(using: cell, photo: photo, collectionView: collectionView, index: indexPath)
+        
         return cell
-
+    }
+    
+    //Set size of cells relative to the view size
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = ((view.frame.width) - (3 * itemSpacing))/3
+        let height = width
+        
+        return CGSize(width: width, height: height)
     }
 
 }
