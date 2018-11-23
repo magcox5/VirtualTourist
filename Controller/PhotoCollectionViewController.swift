@@ -18,7 +18,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 //    let dataController = DataController(modelName: "VirtualTourist")
     var dataController: DataController!
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
-    var vtSpan = MKCoordinateSpanMake(0.03, 0.03)
+    var vtSpan = MKCoordinateSpan.init(latitudeDelta: 0.03, longitudeDelta: 0.03)
     var vtBBox = ""
     var newPin = true
     var photoCount: Int = 0

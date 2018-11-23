@@ -18,7 +18,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     var dataController:DataController!
     var fetchedResultsController:NSFetchedResultsController<Pin>!
     var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
-    var vtSpan = MKCoordinateSpanMake(0.1, 0.1)
+    var vtSpan = MKCoordinateSpan.init(latitudeDelta: 0.1, longitudeDelta: 0.1)
     var vtBBox: String = " "
     var newPin: Bool = true
     var currentPin: Pin!
@@ -140,7 +140,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         //  Look through gesture recognizers to determine whether this region change is from user interaction
         if let gestureRecognizers = view.gestureRecognizers {
             for recognizer in gestureRecognizers {
-                if( recognizer.state == UIGestureRecognizerState.began || recognizer.state == UIGestureRecognizerState.ended ) {
+                if( recognizer.state == UIGestureRecognizer.State.began || recognizer.state == UIGestureRecognizer.State.ended ) {
                     return true
                 }
             }
@@ -171,7 +171,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
 
     @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
-        if gestureRecognizer.state != UIGestureRecognizerState.ended {
+        if gestureRecognizer.state != UIGestureRecognizer.State.ended {
             return
         }
         print("Long press on screen detected")
