@@ -22,6 +22,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     var vtBBox: String = " "
     var newPin: Bool = true
     var currentPin: Pin!
+    var deletePins: Bool = false
 
     // MARK:  Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -32,9 +33,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     @IBAction func editPins(_ sender: Any) {
         if vtToolbar.isHidden == true {
             vtToolbar.isHidden = false
+            deletePins = true
             editPinMsg.title = "Done"
         } else {
             vtToolbar.isHidden = true
+            deletePins = false
             editPinMsg.title = "Edit"
         }
     }
@@ -241,13 +244,20 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
       if let result = fetchedResultsController.fetchedObjects {
          for pin in result {
             if pin.latitude == selectedAnnotationLat && pin.longitude == selectedAnnotationLong {
-               selectedPin = pin
-               controller?.currentPin = selectedPin
-               present(controller!, animated: true, completion: nil)
-               break
+                  selectedPin = pin
+               if deletePins == false {
+                  controller?.currentPin = selectedPin
+                  present(controller!, animated: true, completion: nil)
+               } else {
+                  // Delete pin from map and database
+                  mapView.removeAnnotation(selectedAnnotation!)
+                  dataController.viewContext.delete(selectedPin)
+                  try? dataController.viewContext.save()
                }
+               break
             }
          }
+      }
    }
 }
 extension MapViewController {
