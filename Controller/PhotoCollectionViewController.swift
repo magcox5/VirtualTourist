@@ -63,6 +63,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                 let itemToDelete = self.pinPhotos[itemIndex.row]
                 print(itemToDelete.fileName! as Any)
                 self.pinPhotos.remove(at: itemIndex.row)
+                photoCount -= 1
                 dataController.viewContext.delete(itemToDelete)
                 //DispatchQueue.main.async {
 //                self.photoCollectionView.deleteItems(at: [itemIndex])
@@ -71,6 +72,9 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
             }
             try? dataController.viewContext.save()
                 newCollection.title = bottomBarMessageNew
+        }
+        DispatchQueue.main.async {
+            self.photoCollectionView.reloadData()
         }
         
     }
