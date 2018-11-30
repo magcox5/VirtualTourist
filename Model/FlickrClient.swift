@@ -10,10 +10,7 @@ import Foundation
 import UIKit
 import MapKit
 
-//class FlickrClient {
-
 extension virtualTouristModel  {
-//var myNewDictArray: [[String:Int]] = []
     func getFlickrPhotos(vtBBox: String, completionHandler: @escaping (_ success: Bool, _ errorString: String?, _ dataPhotos: [[String:Any]], _ photoCount: Int) -> Void){
         
         let methodParameters: [String: String?] =

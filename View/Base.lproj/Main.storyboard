@@ -178,7 +178,7 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="VuN-Dm-rud" id="HNc-xe-Fzd"/>
-                        <outlet property="newCollection" destination="cOJ-mN-U8h" id="Uk9-zB-Yb5"/>
+                        <outlet property="newCollection" destination="1PI-1w-Mvf" id="Dxc-Lw-Ino"/>
                         <outlet property="okButton" destination="VDq-HW-r0J" id="jo5-ip-5IT"/>
                         <outlet property="photoCollectionView" destination="V7K-tU-LMw" id="ueb-h9-uFT"/>
                         <outlet property="pinWithoutPhotos" destination="q9H-S1-j6i" id="Yhz-6q-71M"/>
