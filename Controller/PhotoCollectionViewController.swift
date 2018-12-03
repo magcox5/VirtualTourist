@@ -68,13 +68,16 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                 //DispatchQueue.main.async {
 //                self.photoCollectionView.deleteItems(at: [itemIndex])
                 //}
-
+                let cell = self.photoCollectionView.cellForItem(at: itemIndex)
+                cell?.alpha=1.0
+                cell?.contentView.alpha=1.0
             }
             try? dataController.viewContext.save()
                 newCollection.title = bottomBarMessageNew
         }
         DispatchQueue.main.async {
-            self.photoCollectionView.reloadData()
+            //self.photoCollectionView.reloadData()
+            self.reloadPhotos()
         }
         
     }
@@ -213,7 +216,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
 
         let cell = collectionView.cellForItem(at: indexPath)
-        //let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
         cell?.alpha=1.0
         cell?.contentView.alpha=1.0
         // if no items are selected, change message back to original message

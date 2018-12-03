@@ -250,9 +250,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                   present(controller!, animated: true, completion: nil)
                } else {
                   // Delete pin from map and database
-                  mapView.removeAnnotation(selectedAnnotation!)
                   dataController.viewContext.delete(selectedPin)
                   try? dataController.viewContext.save()
+                  self.mapView.removeAnnotation(selectedAnnotation!)
                }
                break
             }
@@ -337,17 +337,5 @@ extension MapViewController {
         print("Current center is: \(mapView.region.center)")
     }
     
-//
-//extension MapViewController {
-//
-//    @objc func executeSearch() {
-//        if let fc = fetchedResultsController {
-//            do {
-//                try fc.performFetch()
-//            } catch let e as NSError {
-//                print("Error while trying to perform a String(describing: search: \n\(e)\n\(String(describing: fetchedResultsController))")
-//            }
-//        }
-//    }
-//}
+
 }
