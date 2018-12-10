@@ -13,6 +13,7 @@ class PhotoCell: UICollectionViewCell {
     var imageUrl: String = ""
     //@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var photoImage: UIImageView!
+    @IBOutlet weak var photoActivityIndicator: UIActivityIndicatorView!
     
     
     

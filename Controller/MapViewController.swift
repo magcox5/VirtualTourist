@@ -207,7 +207,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                   print("Just created a new pin: \(np)")
                   self.currentPin = np
          // Convert coordinates to a bbox string
-         self.vtBBox = self.convertCoordToBBox(latLon: newCoordinates)
+         self.vtBBox = virtualTouristModel.sharedInstance().convertCoordToBBox(latLon: newCoordinates)
          
          // Segue to collection view to display photos
          let controller = self.storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
@@ -227,7 +227,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
       let annotation = view.annotation as! MKPointAnnotation
       print("The latitude is: ", annotation.coordinate.latitude)
       print("The longitude is: ", annotation.coordinate.longitude)
-      vtBBox = convertCoordToBBox(latLon: annotation.coordinate)
+      vtBBox = virtualTouristModel.sharedInstance().convertCoordToBBox(latLon: annotation.coordinate)
       // Show photos for selected pin
         let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
         controller?.vtCoordinate = (view.annotation?.coordinate)!
@@ -261,30 +261,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
    }
 }
 extension MapViewController {
-    func convertCoordToBBox(latLon: CLLocationCoordinate2D) -> String {
-        var minLat: Double = latLon.latitude as Double - Double(Constants.Flickr.SearchBBoxHalfHeight)
-        var minLon: Double = latLon.longitude as Double - Double(Constants.Flickr.SearchBBoxHalfWidth)
-        var maxLat: Double = latLon.latitude as Double + Double(Constants.Flickr.SearchBBoxHalfHeight)
-        var maxLon: Double = latLon.longitude as Double + Double(Constants.Flickr.SearchBBoxHalfWidth)
-        
-        // If any of the values are out of range, set them to the min or max of the range
-        if (!isValueInRange(value: minLat, min: Double(Constants.Flickr.SearchLatRange.0), max: Double(Constants.Flickr.SearchLatRange.1))) {
-            minLat = Double(Constants.Flickr.SearchLatRange.0)
-        }
-        if (!isValueInRange(value: minLon, min: Double(Constants.Flickr.SearchLonRange.0), max: Double(Constants.Flickr.SearchLonRange.1))) {
-            minLon = Double(Constants.Flickr.SearchLonRange.0)
-        }
-        
-        if (!isValueInRange(value: maxLat, min: Double(Constants.Flickr.SearchLatRange.0), max: Double(Constants.Flickr.SearchLatRange.1))) {
-            maxLat = Double(Constants.Flickr.SearchLatRange.1)
-        }
-        if (!isValueInRange(value: maxLon, min: Double(Constants.Flickr.SearchLonRange.0), max: Double(Constants.Flickr.SearchLonRange.1))) {
-            maxLon = Double(Constants.Flickr.SearchLonRange.1)
-        }
-        
-        return "\(minLon),\(minLat),\(maxLon),\(maxLat)"
-    }
-    
     func getPinName(coordinates: CLLocationCoordinate2D, completionHandler: @escaping (String?, Error?) -> ()) {
         let pinLat: CLLocationDegrees = coordinates.latitude
         let pinLon: CLLocationDegrees = coordinates.longitude
@@ -300,10 +276,6 @@ extension MapViewController {
             }
         })
     }
-
-    func isValueInRange(value: Double, min: Double, max: Double) -> Bool {
-            return !(value < min || value > max)
-        }
 
     func setupLongPressGestureRecognizer() {
         // Set variables for detecting long press to drop pin

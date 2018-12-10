@@ -25,6 +25,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     var bottomBarMessageDelete = "Press here to delete selected photos"
     var bottomBarMessageNew = "New Collection"
     var pinPhotos: [Photo] = []
+    
     // MARK: - Properties
     fileprivate let reuseIdentifier = "photoCell"
     fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
@@ -34,28 +35,37 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     
     @IBOutlet weak var pinWithoutPhotos: UILabel!
     @IBOutlet weak var mapView: MKMapView!
-    
-    @IBOutlet weak var newCollection: UIBarButtonItem!
-
+    @IBOutlet weak var newOrDeleteCollection: UIBarButtonItem!
     @IBOutlet weak var okButton: UIBarButtonItem!
-    
     @IBOutlet weak var photoCollectionView: UICollectionView!
     
+    // MARK: - Actions
     @IBAction func okButton(_ sender: Any) {
         //TODO: return to previous (map) screen
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func newCollection(_ sender: Any) {
+    @IBAction func newOrDeleteCollection(_ sender: Any) {
         // If "New Collection" button is pressed...
         // Delete current photos in coredata and array, then reload new ones
-        if newCollection.title == bottomBarMessageNew {
+        if newOrDeleteCollection.title == bottomBarMessageNew {
+            for cell in photoCollectionView.visibleCells {
+                if let cell = cell as? PhotoCell {
+                    cell.photoActivityIndicator.startAnimating()
+                }
+            }
             for photo in self.pinPhotos {
                 dataController.viewContext.delete(photo)
             }
             self.pinPhotos = []
             getNewPhotos()
             try? dataController.viewContext.save()
+            for cell in photoCollectionView.visibleCells {
+                if let cell = cell as? PhotoCell {
+                    cell.photoActivityIndicator.stopAnimating()
+                }
+            }
+
         } else {
             //Delete photos in core data and collectionview, return message to "new collection"
             let selectedItems = self.photoCollectionView.indexPathsForSelectedItems
@@ -73,13 +83,9 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                 cell?.contentView.alpha=1.0
             }
             try? dataController.viewContext.save()
-                newCollection.title = bottomBarMessageNew
+                newOrDeleteCollection.title = bottomBarMessageNew
         }
-        DispatchQueue.main.async {
-            //self.photoCollectionView.reloadData()
             self.reloadPhotos()
-        }
-        
     }
     
     
@@ -110,7 +116,8 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         photoCollectionView.allowsMultipleSelection = true
-        pinWithoutPhotos.isHidden = false
+        pinWithoutPhotos.isHidden = true
+        newOrDeleteCollection.title = bottomBarMessageNew
 
         // Set the region
         var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
@@ -191,6 +198,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
         cell.backgroundColor = UIColor.white
+        cell.photoActivityIndicator.startAnimating()
         
         DispatchQueue.main.async {
             cell.photoImage.image = nil
@@ -199,6 +207,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         let photo = self.pinPhotos[indexPath.row]
         downloadImage(using: cell, photo: photo, collectionView: collectionView, index: indexPath)
         
+        cell.photoActivityIndicator.stopAnimating()
         return cell
     }
     
@@ -210,7 +219,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         cell?.contentView.alpha=0.5
     
         print("Index paths for selected items is: ", self.photoCollectionView.indexPathsForSelectedItems!)
-        newCollection.title = bottomBarMessageDelete
+        newOrDeleteCollection.title = bottomBarMessageDelete
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -220,7 +229,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         cell?.contentView.alpha=1.0
         // if no items are selected, change message back to original message
         if self.photoCollectionView!.indexPathsForSelectedItems == [] {
-            newCollection.title = bottomBarMessageNew
+            newOrDeleteCollection.title = bottomBarMessageNew
         } else {
             print("Position of photos selected:  ", collectionView.indexPathsForSelectedItems!);
         }
