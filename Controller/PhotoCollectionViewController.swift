@@ -49,43 +49,45 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         // If "New Collection" button is pressed...
         // Delete current photos in coredata and array, then reload new ones
         if newOrDeleteCollection.title == bottomBarMessageNew {
-            for cell in photoCollectionView.visibleCells {
-                if let cell = cell as? PhotoCell {
-                    cell.photoActivityIndicator.startAnimating()
-                }
-            }
+//            for cell in photoCollectionView.visibleCells {
+//                if let cell = cell as? PhotoCell {
+//                    cell.photoActivityIndicator.startAnimating()
+//                }
+//            }
             for photo in self.pinPhotos {
                 dataController.viewContext.delete(photo)
             }
             self.pinPhotos = []
             getNewPhotos()
             try? dataController.viewContext.save()
-            for cell in photoCollectionView.visibleCells {
-                if let cell = cell as? PhotoCell {
-                    cell.photoActivityIndicator.stopAnimating()
-                }
-            }
+//            for cell in photoCollectionView.visibleCells {
+//                if let cell = cell as? PhotoCell {
+//                    cell.photoActivityIndicator.stopAnimating()
+//                }
+//            }
 
         } else {
             //Delete photos in core data and collectionview, return message to "new collection"
-            let selectedItems = self.photoCollectionView.indexPathsForSelectedItems
+            let selectedItems = self.photoCollectionView.indexPathsForSelectedItems?.sorted{$1 < $0}
+            print("The sorted order of the indices to delete is:  ", selectedItems!)
             for itemIndex in selectedItems! {
                 let itemToDelete = self.pinPhotos[itemIndex.row]
                 print(itemToDelete.fileName! as Any)
                 self.pinPhotos.remove(at: itemIndex.row)
                 photoCount -= 1
                 dataController.viewContext.delete(itemToDelete)
-                //DispatchQueue.main.async {
-//                self.photoCollectionView.deleteItems(at: [itemIndex])
-                //}
+//                DispatchQueue.main.async {
+//                    self.photoCollectionView.deleteItems(at: [itemIndex])
+//                }
                 let cell = self.photoCollectionView.cellForItem(at: itemIndex)
                 cell?.alpha=1.0
                 cell?.contentView.alpha=1.0
             }
-            try? dataController.viewContext.save()
+            print("Number of photos now is:  ", photoCount)
+//            try? dataController.viewContext.save()
                 newOrDeleteCollection.title = bottomBarMessageNew
         }
-            self.reloadPhotos()
+        self.reloadPhotos()
     }
     
     
@@ -103,6 +105,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                             self.pinPhotos.append(photo)
                     }
                     try? self.dataController.viewContext.save()
+                    self.reloadPhotos()
                 }
             } else {
                 let alert = UIAlertController(title: "Error", message: "", preferredStyle: .alert)
@@ -131,9 +134,10 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         if newPin {
             getNewPhotos()
             try? dataController.viewContext.save()
-        } else {
-            reloadPhotos()
         }
+//        else {
+            reloadPhotos()
+//        }
 
         // Do any additional setup after loading the view.
         mapView.centerCoordinate = vtCoordinate
