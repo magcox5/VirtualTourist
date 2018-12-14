@@ -36,12 +36,11 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     @IBOutlet weak var pinWithoutPhotos: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var newOrDeleteCollection: UIBarButtonItem!
-    @IBOutlet weak var okButton: UIBarButtonItem!
+    @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var photoCollectionView: UICollectionView!
     
     // MARK: - Actions
-    @IBAction func okButton(_ sender: Any) {
-        //TODO: return to previous (map) screen
+    @IBAction func backButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -49,43 +48,31 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         // If "New Collection" button is pressed...
         // Delete current photos in coredata and array, then reload new ones
         if newOrDeleteCollection.title == bottomBarMessageNew {
-//            for cell in photoCollectionView.visibleCells {
-//                if let cell = cell as? PhotoCell {
-//                    cell.photoActivityIndicator.startAnimating()
-//                }
-//            }
             for photo in self.pinPhotos {
                 dataController.viewContext.delete(photo)
             }
             self.pinPhotos = []
             getNewPhotos()
             try? dataController.viewContext.save()
-//            for cell in photoCollectionView.visibleCells {
-//                if let cell = cell as? PhotoCell {
-//                    cell.photoActivityIndicator.stopAnimating()
-//                }
-//            }
 
         } else {
             //Delete photos in core data and collectionview, return message to "new collection"
             let selectedItems = self.photoCollectionView.indexPathsForSelectedItems?.sorted{$1 < $0}
             print("The sorted order of the indices to delete is:  ", selectedItems!)
             for itemIndex in selectedItems! {
-                let itemToDelete = self.pinPhotos[itemIndex.row]
-                print(itemToDelete.fileName! as Any)
-                self.pinPhotos.remove(at: itemIndex.row)
-                photoCount -= 1
-                dataController.viewContext.delete(itemToDelete)
-//                DispatchQueue.main.async {
-//                    self.photoCollectionView.deleteItems(at: [itemIndex])
-//                }
-                let cell = self.photoCollectionView.cellForItem(at: itemIndex)
-                cell?.alpha=1.0
-                cell?.contentView.alpha=1.0
+                // 1st return cells to normal alpha
+                    let cell = self.photoCollectionView.cellForItem(at: itemIndex)
+                    cell?.alpha=1.0
+                    cell?.contentView.alpha=1.0
+                    // Delete item from pinPhotos array and core data
+                    let itemToDelete = self.pinPhotos[itemIndex.row]
+                    print(itemToDelete.fileName! as Any)
+                    self.pinPhotos.remove(at: itemIndex.row)
+                    self.photoCount -= 1
+                    self.dataController.viewContext.delete(itemToDelete)
             }
             print("Number of photos now is:  ", photoCount)
-//            try? dataController.viewContext.save()
-                newOrDeleteCollection.title = bottomBarMessageNew
+            newOrDeleteCollection.title = bottomBarMessageNew
         }
         self.reloadPhotos()
     }
@@ -208,8 +195,10 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
             cell.photoImage.image = nil
         }
         
-        let photo = self.pinPhotos[indexPath.row]
-        downloadImage(using: cell, photo: photo, collectionView: collectionView, index: indexPath)
+        DispatchQueue.global(qos: .background).async {
+            let photo = self.pinPhotos[indexPath.row]
+            self.downloadImage(using: cell, photo: photo, collectionView: collectionView, index: indexPath)
+        }
         
         cell.photoActivityIndicator.stopAnimating()
         return cell

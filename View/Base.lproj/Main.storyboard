@@ -154,9 +154,9 @@
                                 <rect key="frame" x="0.0" y="30" width="375" height="44"/>
                                 <items>
                                     <navigationItem title="Photo Collection" id="57o-YI-J13" userLabel="Photo Collection">
-                                        <barButtonItem key="leftBarButtonItem" title="&lt; OK" id="VDq-HW-r0J">
+                                        <barButtonItem key="leftBarButtonItem" title="&lt; Back" id="VDq-HW-r0J" userLabel="Back Button">
                                             <connections>
-                                                <action selector="okButton:" destination="U1Y-5i-2bu" id="KOK-5t-hOv"/>
+                                                <action selector="backButton:" destination="U1Y-5i-2bu" id="kpZ-99-e0x"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -182,9 +182,9 @@
                         <viewLayoutGuide key="safeArea" id="uie-5H-BRU"/>
                     </view>
                     <connections>
+                        <outlet property="backButton" destination="VDq-HW-r0J" id="t3Z-eN-qVt"/>
                         <outlet property="mapView" destination="VuN-Dm-rud" id="HNc-xe-Fzd"/>
                         <outlet property="newOrDeleteCollection" destination="1PI-1w-Mvf" id="YTO-Gh-arl"/>
-                        <outlet property="okButton" destination="VDq-HW-r0J" id="jo5-ip-5IT"/>
                         <outlet property="photoCollectionView" destination="V7K-tU-LMw" id="ueb-h9-uFT"/>
                         <outlet property="pinWithoutPhotos" destination="q9H-S1-j6i" id="Yhz-6q-71M"/>
                     </connections>

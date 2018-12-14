@@ -250,9 +250,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                   present(controller!, animated: true, completion: nil)
                } else {
                   // Delete pin from map and database
-                  dataController.viewContext.delete(selectedPin)
-                  try? dataController.viewContext.save()
-                  self.mapView.removeAnnotation(selectedAnnotation!)
+                  DispatchQueue.main.async {
+                     self.mapView.removeAnnotations(mapView.annotations)
+                     self.dataController.viewContext.delete(selectedPin)
+                     try? self.dataController.viewContext.save()
+                     self.displayPinLocations()
+                  }
                }
                break
             }
