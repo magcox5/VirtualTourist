@@ -271,7 +271,7 @@ extension MapViewController {
         CLGeocoder().reverseGeocodeLocation(pinLoc, completionHandler: { (placemarks, error) in
             if error == nil {
                 let firstLocation = placemarks?[0]
-                let pinName = firstLocation!.country! + firstLocation!.locality! + firstLocation!.administrativeArea! + firstLocation!.postalCode!
+               let pinName = firstLocation!.name!
                 completionHandler(pinName, nil)
             } else {
                 // An error occurred during geocoding

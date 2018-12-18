@@ -21,6 +21,10 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     var vtBBox = ""
     var newPin = true
     var photoCount: Int = 0
+    var viewCount: Int = 0
+    var noPhotosMessage = "No photos for this location"
+    var loadingPhotosMessage = "Downloading photos... please wait"
+    // var photoCount: Int = 21
     let itemSpacing: CGFloat = 9.0
     var bottomBarMessageDelete = "Press here to delete selected photos"
     var bottomBarMessageNew = "New Collection"
@@ -95,6 +99,11 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                     self.reloadPhotos()
                 }
             } else {
+                // photos not found... show pinWithoutPhotos
+                DispatchQueue.main.async {
+                    self.pinWithoutPhotos.text = self.noPhotosMessage
+                    self.pinWithoutPhotos.isHidden = false
+                }
                 let alert = UIAlertController(title: "Error", message: "", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title:NSLocalizedString("Ok", comment: "Default Action"), style: .default))
                 alert.message = error!
@@ -122,10 +131,8 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
             getNewPhotos()
             try? dataController.viewContext.save()
         }
-//        else {
-            reloadPhotos()
-//        }
-
+        reloadPhotos()
+        
         // Do any additional setup after loading the view.
         mapView.centerCoordinate = vtCoordinate
         
@@ -137,6 +144,10 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
             self.pinPhotos = try! self.dataController.viewContext.fetch(photoFetchRequest) as [Photo]
             self.photoCount = self.pinPhotos.count
             self.photoCollectionView.reloadData()
+            if self.photoCount == 0 {
+                self.pinWithoutPhotos.text = self.noPhotosMessage
+                self.pinWithoutPhotos.isHidden = false
+            }
         }
     }
     
@@ -174,21 +185,29 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     // MARK: UICollectionViewDataSource
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if self.photoCount > 0 {
-            DispatchQueue.main.async {
-                self.pinWithoutPhotos.isHidden = true
-            }
+        self.viewCount += 1
+        if self.viewCount > 1 && self.photoCount == 0 {
+            self.pinWithoutPhotos.isHidden = false
+            self.pinWithoutPhotos.text = self.noPhotosMessage
+            self.viewCount = 0
         } else {
-            DispatchQueue.main.async {
+            if self.photoCount == 0 {
                 self.pinWithoutPhotos.isHidden = false
+                self.pinWithoutPhotos.text = self.loadingPhotosMessage
+            } else {
+                self.pinWithoutPhotos.text = self.noPhotosMessage
+                self.pinWithoutPhotos.isHidden = true
+                self.viewCount = 0
             }
         }
+        print("Number of photos to display:  ", self.photoCount)
         return self.photoCount
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
         cell.backgroundColor = UIColor.white
+        cell.photoActivityIndicator.isHidden = false
         cell.photoActivityIndicator.startAnimating()
         
         DispatchQueue.main.async {
@@ -201,6 +220,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         }
         
         cell.photoActivityIndicator.stopAnimating()
+        cell.photoActivityIndicator.isHidden = true
         return cell
     }
     
