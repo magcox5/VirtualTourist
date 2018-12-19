@@ -128,6 +128,8 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
         // get flickr photos if this is a new pin
         if newPin {
+            viewCount = 0
+            self.pinWithoutPhotos.isHidden = true
             getNewPhotos()
             try? dataController.viewContext.save()
         }
@@ -144,10 +146,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
             self.pinPhotos = try! self.dataController.viewContext.fetch(photoFetchRequest) as [Photo]
             self.photoCount = self.pinPhotos.count
             self.photoCollectionView.reloadData()
-            if self.photoCount == 0 {
-                self.pinWithoutPhotos.text = self.noPhotosMessage
-                self.pinWithoutPhotos.isHidden = false
-            }
         }
     }
     
@@ -186,21 +184,21 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         self.viewCount += 1
-        if self.viewCount > 1 && self.photoCount == 0 {
-            self.pinWithoutPhotos.isHidden = false
-            self.pinWithoutPhotos.text = self.noPhotosMessage
-            self.viewCount = 0
-        } else {
+        DispatchQueue.main.async {
             if self.photoCount == 0 {
                 self.pinWithoutPhotos.isHidden = false
-                self.pinWithoutPhotos.text = self.loadingPhotosMessage
+                if self.viewCount <= 2 {
+                    self.pinWithoutPhotos.text = self.loadingPhotosMessage
+                } else {
+                    self.pinWithoutPhotos.text = self.noPhotosMessage
+                }
             } else {
-                self.pinWithoutPhotos.text = self.noPhotosMessage
                 self.pinWithoutPhotos.isHidden = true
+                self.pinWithoutPhotos.text = self.noPhotosMessage
                 self.viewCount = 0
             }
         }
-        print("Number of photos to display:  ", self.photoCount)
+        print("Number of photos to display:  ", self.photoCount, self.pinWithoutPhotos.isHidden, self.viewCount)
         return self.photoCount
     }
 
