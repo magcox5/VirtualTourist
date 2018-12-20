@@ -117,17 +117,20 @@
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kgH-IH-2eK" userLabel="photoImage">
                                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                         </imageView>
-                                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" restorationIdentifier="photoActivityIndicator" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Po1-jL-pCt" userLabel="Photo Activity Indicator">
-                                                            <rect key="frame" x="40" y="40" width="20" height="20"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" restorationIdentifier="photoActivityIndicator" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Po1-jL-pCt" userLabel="Photo Activity Indicator">
+                                                            <rect key="frame" x="40" y="60" width="20" height="0.0"/>
                                                         </activityIndicatorView>
                                                     </subviews>
                                                 </view>
                                                 <constraints>
                                                     <constraint firstItem="kgH-IH-2eK" firstAttribute="leading" secondItem="kd8-tr-g1d" secondAttribute="leading" id="295-Me-nd3"/>
+                                                    <constraint firstAttribute="trailingMargin" secondItem="Po1-jL-pCt" secondAttribute="trailing" constant="32" id="4bq-Cf-aGg"/>
                                                     <constraint firstAttribute="trailing" secondItem="kgH-IH-2eK" secondAttribute="trailing" id="5xb-G3-Gok"/>
+                                                    <constraint firstAttribute="bottomMargin" secondItem="Po1-jL-pCt" secondAttribute="bottom" constant="32" id="SOl-Il-cB2"/>
                                                     <constraint firstAttribute="bottom" secondItem="kgH-IH-2eK" secondAttribute="bottom" id="d33-qt-rTG"/>
                                                     <constraint firstItem="kgH-IH-2eK" firstAttribute="top" secondItem="kd8-tr-g1d" secondAttribute="top" id="ek2-9e-jcW"/>
+                                                    <constraint firstItem="Po1-jL-pCt" firstAttribute="top" secondItem="kd8-tr-g1d" secondAttribute="topMargin" constant="32" id="mqC-ta-4dC"/>
+                                                    <constraint firstItem="Po1-jL-pCt" firstAttribute="leading" secondItem="kd8-tr-g1d" secondAttribute="leadingMargin" constant="32" id="zoy-mb-hwJ"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="photoActivityIndicator" destination="Po1-jL-pCt" id="hCk-o9-kPA"/>

@@ -161,11 +161,15 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     private func downloadImage(using cell: PhotoCell, photo: Photo, collectionView: UICollectionView, index: IndexPath) {
         if let imageData = photo.photo {
             DispatchQueue.main.async {
+                cell.photoActivityIndicator.stopAnimating()
                 cell.photoImage.image = UIImage(data: Data(referencing: imageData as NSData))
             }
         } else {
             if let imageUrl = URL(string: photo.fileName!) {
                 do {
+                    DispatchQueue.main.async {
+                        cell.photoActivityIndicator.startAnimating()
+                    }
                     let imageData = try Data(contentsOf: imageUrl)
                     let image = UIImage(data: imageData)
                     DispatchQueue.main.async {
@@ -173,6 +177,9 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                     }
                     photo.photo = imageData as NSData
                 } catch{
+                    DispatchQueue.main.async {
+                        cell.photoActivityIndicator.stopAnimating()
+                    }
                     print("failed to download image from URL")
                 }
             }
@@ -205,21 +212,17 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
         cell.backgroundColor = UIColor.white
-        cell.photoActivityIndicator.isHidden = false
         cell.photoActivityIndicator.startAnimating()
-        
-        DispatchQueue.main.async {
-            cell.photoImage.image = nil
-        }
-        
-        DispatchQueue.global(qos: .background).async {
-            let photo = self.pinPhotos[indexPath.row]
-            self.downloadImage(using: cell, photo: photo, collectionView: collectionView, index: indexPath)
-        }
-        
-        cell.photoActivityIndicator.stopAnimating()
-        cell.photoActivityIndicator.isHidden = true
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell:UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+            let photo = self.pinPhotos[indexPath.row]
+            let photoCell = cell as! PhotoCell
+            photoCell.imageUrl = photo.fileName!
+            
+            downloadImage(using: photoCell, photo: photo, collectionView: collectionView, index: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
