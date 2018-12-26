@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 // MARK: - Constants
 
@@ -51,7 +52,6 @@ struct Constants {
         static let ResponseFormat = "json"
         static let DisableJSONCallback = "1" /* 1 means "yes" */
         static let GalleryPhotosMethod = "flickr.galleries.getPhotos"
-        // static let GalleryID = "5704-72157622566655097"
         static let MediumURL = "url_m"
         static let UseSafeSearch = "1"
         static let Per_Page = "21"
@@ -71,5 +71,10 @@ struct Constants {
     // MARK: Flickr Response Values
     struct FlickrResponseValues {
         static let OKStatus = "ok"
+    }
+    
+    struct MapStartingValues {
+        static let startingCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
+        static let startingSpan = MKCoordinateSpan.init(latitudeDelta: 0.1, longitudeDelta: 0.1)
     }
 }

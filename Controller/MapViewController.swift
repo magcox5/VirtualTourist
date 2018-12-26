@@ -17,8 +17,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     // MARK:  Variables
     var dataController:DataController!
     var fetchedResultsController:NSFetchedResultsController<Pin>!
-    var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
-    var vtSpan = MKCoordinateSpan.init(latitudeDelta: 0.1, longitudeDelta: 0.1)
+    var vtCoordinate = Constants.MapStartingValues.startingCoordinate
+    var vtSpan = Constants.MapStartingValues.startingSpan
     var vtBBox: String = " "
     var newPin: Bool = true
     var currentPin: Pin!

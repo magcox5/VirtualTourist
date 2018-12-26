@@ -16,15 +16,14 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     var currentPin: Pin!
     var fetchedResultsController: NSFetchedResultsController<Photo>!
     var dataController: DataController!
-    var vtCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
-    var vtSpan = MKCoordinateSpan.init(latitudeDelta: 0.03, longitudeDelta: 0.03)
+    var vtCoordinate = Constants.MapStartingValues.startingCoordinate
+    var vtSpan = Constants.MapStartingValues.startingSpan
     var vtBBox = ""
     var newPin = true
     var photoCount: Int = 0
     var viewCount: Int = 0
     var noPhotosMessage = "No photos for this location"
     var loadingPhotosMessage = "Downloading photos... please wait"
-    // var photoCount: Int = 21
     let itemSpacing: CGFloat = 9.0
     var bottomBarMessageDelete = "Press here to delete selected photos"
     var bottomBarMessageNew = "New Collection"
@@ -36,7 +35,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     fileprivate let itemsPerRow: CGFloat = 3
 
     // MARK: - Outlets
-    
     @IBOutlet weak var pinWithoutPhotos: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var newOrDeleteCollection: UIBarButtonItem!
@@ -61,6 +59,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
         } else {
             //Delete photos in core data and collectionview, return message to "new collection"
+            
             let selectedItems = self.photoCollectionView.indexPathsForSelectedItems?.sorted{$1 < $0}
             print("The sorted order of the indices to delete is:  ", selectedItems!)
             for itemIndex in selectedItems! {
