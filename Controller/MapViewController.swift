@@ -24,12 +24,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     var currentPin: Pin!
     var deletePins: Bool = false
 
+   //declare the defaults...
+   let defaults:UserDefaults = UserDefaults.standard
+
     // MARK:  Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var deletePinsMsg: UIBarButtonItem!
     @IBOutlet weak var editPinMsg: UIBarButtonItem!
     @IBOutlet weak var vtToolbar: UIToolbar!
-    
+
+   // MARK: Actions
     @IBAction func editPins(_ sender: Any) {
         if vtToolbar.isHidden == true {
             vtToolbar.isHidden = false
@@ -41,16 +45,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
             editPinMsg.title = "Edit"
         }
     }
-
-    //declare the defaults...
-    let defaults:UserDefaults = UserDefaults.standard
-    
+   
+   // MARK:  Core Data setup - Fetched Results Controller
     fileprivate func setupFetchedResultsController() {
         let fetchRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true),NSSortDescriptor(key: "latitude", ascending: false)]
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        //fetchedResultsController.delegate = (self as! NSFetchedResultsControllerDelegate)
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -89,6 +90,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         
     }
 
+   // MARK:  - MKMapView
     private func displayPinLocations() {
 
         setupFetchedResultsController()
@@ -102,7 +104,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
             // The lat and lon are used to create a CLLocationCoordinates2D instance.
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             
-            // Here we create the annotation and set its coordiate, title, and subtitle properties
+            // Create the annotation and set its coordiate, title, and subtitle properties
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             
@@ -295,10 +297,10 @@ extension MapViewController {
         // If not, set default center and map zoom level and save to defaults...
         print("Never run this program before... Set default values")
         defaults.set(true, forKey: "HasBeenOpenedBefore")
-        defaults.set(37.335743, forKey: "MapLatitude")
-        defaults.set(-122.009389, forKey: "MapLongitude")
-        defaults.set(0.2, forKey: "MapLatitudeDelta")
-        defaults.set(0.2, forKey: "MapLongitudeDelta")
+        defaults.set(Constants.MapStartingValues.mapLatitude, forKey: "MapLatitude")
+        defaults.set(Constants.MapStartingValues.mapLongitude, forKey: "MapLongitude")
+        defaults.set(Constants.MapStartingValues.mapLatitudeDelta, forKey: "MapLatitudeDelta")
+        defaults.set(Constants.MapStartingValues.mapLongitudeDelta, forKey: "MapLongitudeDelta")
     }
 
     func setMapRegion() {

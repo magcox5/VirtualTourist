@@ -24,15 +24,16 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     var viewCount: Int = 0
     var noPhotosMessage = "No photos for this location"
     var loadingPhotosMessage = "Downloading photos... please wait"
-    let itemSpacing: CGFloat = 9.0
     var bottomBarMessageDelete = "Press here to delete selected photos"
     var bottomBarMessageNew = "New Collection"
     var pinPhotos: [Photo] = []
-    
+
     // MARK: - Properties
     fileprivate let reuseIdentifier = "photoCell"
     fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     fileprivate let itemsPerRow: CGFloat = 3
+    let itemSpacing: CGFloat = 9.0
+    
 
     // MARK: - Outlets
     @IBOutlet weak var pinWithoutPhotos: UILabel!

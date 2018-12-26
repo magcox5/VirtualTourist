@@ -76,5 +76,9 @@ struct Constants {
     struct MapStartingValues {
         static let startingCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
         static let startingSpan = MKCoordinateSpan.init(latitudeDelta: 0.1, longitudeDelta: 0.1)
+        static let mapLatitude = 37.335743
+        static let mapLongitude = -122.009389
+        static let mapLatitudeDelta = 0.2
+        static let mapLongitudeDelta = 0.2
     }
 }
