@@ -103,11 +103,11 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                 DispatchQueue.main.async {
                     self.pinWithoutPhotos.text = self.noPhotosMessage
                     self.pinWithoutPhotos.isHidden = false
+                    let alert = UIAlertController(title: "Error", message: "", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title:NSLocalizedString("Ok", comment: "Default Action"), style: .default))
+                    alert.message = error!
+                    self.present(alert, animated: true, completion: nil)
                 }
-                let alert = UIAlertController(title: "Error", message: "", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title:NSLocalizedString("Ok", comment: "Default Action"), style: .default))
-                alert.message = error!
-                self.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -194,7 +194,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         DispatchQueue.main.async {
             if self.photoCount == 0 {
                 self.pinWithoutPhotos.isHidden = false
-                if self.viewCount <= 2 {
+                if self.viewCount < 2 {
                     self.pinWithoutPhotos.text = self.loadingPhotosMessage
                 } else {
                     self.pinWithoutPhotos.text = self.noPhotosMessage
