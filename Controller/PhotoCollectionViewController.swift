@@ -5,6 +5,8 @@
 //  Created by Molly Cox on 11/9/17.
 //  Copyright © 2017 Molly Cox. All rights reserved.
 //
+//  Credits:    John Nolan - downloading images
+//              Tim Ng - placeholder & activity indicator
 
 import UIKit
 import MapKit
