@@ -81,8 +81,35 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         self.reloadPhotos()
     }
     
-    
-    
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        photoCollectionView.allowsMultipleSelection = true
+        pinWithoutPhotos.isHidden = true
+        newOrDeleteCollection.title = bottomBarMessageNew
+        
+        // Set the region
+        var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
+        mapRegion.center = vtCoordinate
+        mapView.setRegion(mapRegion, animated: true)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = vtCoordinate
+        mapView.addAnnotation(annotation)
+        
+        // get flickr photos if this is a new pin
+        if newPin {
+            viewCount = 0
+            self.pinWithoutPhotos.isHidden = true
+            getNewPhotos()
+            try? dataController.viewContext.save()
+        }
+        reloadPhotos()
+        
+        // Do any additional setup after loading the view.
+        mapView.centerCoordinate = vtCoordinate
+    }
+
+    // MARK:  Functions
     fileprivate func getNewPhotos() {
  virtualTouristModel.sharedInstance().getFlickrPhotos(vtBBox: vtBBox) {(success, error, data, imageCount) in
             if success {
@@ -110,34 +137,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                 }
             }
         }
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        photoCollectionView.allowsMultipleSelection = true
-        pinWithoutPhotos.isHidden = true
-        newOrDeleteCollection.title = bottomBarMessageNew
-
-        // Set the region
-        var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
-        mapRegion.center = vtCoordinate
-        mapView.setRegion(mapRegion, animated: true)
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = vtCoordinate
-        mapView.addAnnotation(annotation)
-
-        // get flickr photos if this is a new pin
-        if newPin {
-            viewCount = 0
-            self.pinWithoutPhotos.isHidden = true
-            getNewPhotos()
-            try? dataController.viewContext.save()
-        }
-        reloadPhotos()
-        
-        // Do any additional setup after loading the view.
-        mapView.centerCoordinate = vtCoordinate
-        
     }
 
     fileprivate func reloadPhotos() {
@@ -188,13 +187,22 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
     
     // MARK: UICollectionViewDataSource
-
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell:UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        self.pinWithoutPhotos.text = self.loadingPhotosMessage
+        let photo = self.pinPhotos[indexPath.row]
+        let photoCell = cell as! PhotoCell
+        photoCell.imageUrl = photo.fileName!
+        
+        downloadImage(using: photoCell, photo: photo, collectionView: collectionView, index: indexPath)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         self.viewCount += 1
         DispatchQueue.main.async {
             if self.photoCount == 0 {
                 self.pinWithoutPhotos.isHidden = false
-                if self.viewCount < 2 {
+                if self.viewCount <= 2 {
                     self.pinWithoutPhotos.text = self.loadingPhotosMessage
                 } else {
                     self.pinWithoutPhotos.text = self.noPhotosMessage
@@ -214,15 +222,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         cell.backgroundColor = UIColor.white
         cell.photoActivityIndicator.startAnimating()
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell:UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-            let photo = self.pinPhotos[indexPath.row]
-            let photoCell = cell as! PhotoCell
-            photoCell.imageUrl = photo.fileName!
-            
-            downloadImage(using: photoCell, photo: photo, collectionView: collectionView, index: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
