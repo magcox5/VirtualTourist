@@ -16,13 +16,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     
     // MARK:  Variables
     var dataController:DataController!
-    var fetchedResultsController:NSFetchedResultsController<Pin>!
-    var vtCoordinate = Constants.MapStartingValues.startingCoordinate
-    var vtSpan = Constants.MapStartingValues.startingSpan
-    var vtBBox: String = " "
-    var newPin: Bool = true
-    var currentPin: Pin!
-    var deletePins: Bool = false
+    private var fetchedResultsController:NSFetchedResultsController<Pin>!
+    private var vtCoordinate = Constants.MapStartingValues.startingCoordinate
+    private var vtSpan = Constants.MapStartingValues.startingSpan
+    private var vtBBox: String = " "
+    private var newPin: Bool = true
+    private var currentPin: Pin!
+    private var deletePins: Bool = false
 
    //declare the defaults...
    let defaults:UserDefaults = UserDefaults.standard
