@@ -55,7 +55,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         do {
             try fetchedResultsController.performFetch()
         } catch {
-            fatalError("The fetch could not be performed: \(error.localizedDescription)")
+            DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Error", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title:NSLocalizedString("Ok", comment: "Default Action"), style: .default))
+            alert.message = "The fetch could not be performed: \(error.localizedDescription)"
+            self.present(alert, animated: true, completion: nil)
+         }
+            //fatalError("The fetch could not be performed: \(error.localizedDescription)")
         }
     }
     
