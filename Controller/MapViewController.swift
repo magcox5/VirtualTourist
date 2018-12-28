@@ -91,7 +91,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
 
    // MARK:  - MKMapView
-    private func displayPinLocations() {
+    fileprivate func displayPinLocations() {
 
         setupFetchedResultsController()
 
@@ -137,7 +137,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     
     private var mapChangedFromUserInteraction = false
     
-    private func mapViewRegionDidChangeFromUserInteraction() -> Bool {
+    fileprivate func mapViewRegionDidChangeFromUserInteraction() -> Bool {
         let view = self.mapView.subviews[0]
         //  Look through gesture recognizers to determine whether this region change is from user interaction
         if let gestureRecognizers = view.gestureRecognizers {
@@ -266,7 +266,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
    }
 }
 extension MapViewController {
-    func getPinName(coordinates: CLLocationCoordinate2D, completionHandler: @escaping (String?, Error?) -> ()) {
+    fileprivate func getPinName(coordinates: CLLocationCoordinate2D, completionHandler: @escaping (String?, Error?) -> ()) {
         let pinLat: CLLocationDegrees = coordinates.latitude
         let pinLon: CLLocationDegrees = coordinates.longitude
         let pinLoc: CLLocation = CLLocation(latitude: pinLat, longitude: pinLon)
@@ -282,7 +282,7 @@ extension MapViewController {
         })
     }
 
-    func setupLongPressGestureRecognizer() {
+    fileprivate func setupLongPressGestureRecognizer() {
         // Set variables for detecting long press to drop pin
         let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.handleLongPress(_:)))
         lpgr.minimumPressDuration = 0.5
@@ -293,7 +293,7 @@ extension MapViewController {
         mapView.addGestureRecognizer(lpgr)
     }
 
-    func setMapDefaults() {
+    fileprivate func setMapDefaults() {
         // If not, set default center and map zoom level and save to defaults...
         print("Never run this program before... Set default values")
         defaults.set(true, forKey: "HasBeenOpenedBefore")
@@ -303,7 +303,7 @@ extension MapViewController {
         defaults.set(Constants.MapStartingValues.mapLongitudeDelta, forKey: "MapLongitudeDelta")
     }
 
-    func setMapRegion() {
+    fileprivate func setMapRegion() {
         var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
         vtCoordinate = CLLocationCoordinate2D(latitude: defaults.double(forKey: "MapLatitude"), longitude: defaults.double(forKey: "MapLongitude"))
         mapRegion.center = vtCoordinate
