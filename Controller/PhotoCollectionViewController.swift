@@ -17,19 +17,19 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     
     // MARK:  - Variables
     var currentPin: Pin!
-    var fetchedResultsController: NSFetchedResultsController<Photo>!
+    private var fetchedResultsController: NSFetchedResultsController<Photo>!
     var dataController: DataController!
     var vtCoordinate = Constants.MapStartingValues.startingCoordinate
     var vtSpan = Constants.MapStartingValues.startingSpan
     var vtBBox = ""
     var newPin = true
-    var photoCount: Int = 0
-    var viewCount: Int = 0
-    var noPhotosMessage = "No photos for this location"
-    var loadingPhotosMessage = "Downloading photos... please wait"
-    var bottomBarMessageDelete = "Press here to delete selected photos"
-    var bottomBarMessageNew = "New Collection"
-    var pinPhotos: [Photo] = []
+    private var photoCount: Int = 0
+    private var viewCount: Int = 0
+    private var noPhotosMessage = "No photos for this location"
+    private var loadingPhotosMessage = "Downloading photos... please wait"
+    private var bottomBarMessageDelete = "Press here to delete selected photos"
+    private var bottomBarMessageNew = "New Collection"
+    private var pinPhotos: [Photo] = []
 
     // MARK: - Properties
     fileprivate let reuseIdentifier = "photoCell"
