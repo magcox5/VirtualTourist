@@ -176,6 +176,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                     let image = UIImage(data: imageData)
                     DispatchQueue.main.async {
                         cell.photoImage.image = image
+                        cell.photoActivityIndicator.stopAnimating()
                     }
                     photo.photo = imageData as NSData
                 } catch{
