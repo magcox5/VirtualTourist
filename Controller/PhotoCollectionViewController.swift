@@ -36,7 +36,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     fileprivate let sectionInsets = UIEdgeInsets(top: 50.0, left: 20.0, bottom: 50.0, right: 20.0)
     fileprivate let itemsPerRow: CGFloat = 3
     let itemSpacing: CGFloat = 9.0
-    
 
     // MARK: - Outlets
     @IBOutlet weak var pinWithoutPhotos: UILabel!
@@ -47,10 +46,13 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     
     // MARK: - Actions
     @IBAction func backButton(_ sender: Any) {
+        
         self.dismiss(animated: true, completion: nil)
+        
     }
     
     @IBAction func newOrDeleteCollection(_ sender: Any) {
+        
         // If "New Collection" button is pressed...
         // Delete current photos in coredata and array, then reload new ones
         if newOrDeleteCollection.title == bottomBarMessageNew {
@@ -79,10 +81,12 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
             newOrDeleteCollection.title = bottomBarMessageNew
         }
         self.reloadPhotos()
+        
     }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         photoCollectionView.allowsMultipleSelection = true
         pinWithoutPhotos.isHidden = true
@@ -107,10 +111,12 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         
         // Do any additional setup after loading the view.
         mapView.centerCoordinate = vtCoordinate
+        
     }
 
     // MARK:  Functions
     fileprivate func getNewPhotos() {
+        
  virtualTouristModel.shared.getFlickrPhotos(vtBBox: vtBBox) {(success, error, data, imageCount) in
             if success {
                 DispatchQueue.main.async {
@@ -137,27 +143,33 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                 }
             }
         }
+        
     }
 
     fileprivate func reloadPhotos() {
+        
         DispatchQueue.main.async {
             let photoFetchRequest = self.createPhotoFetchRequest() as NSFetchRequest<Photo>
             self.pinPhotos = try! self.dataController.viewContext.fetch(photoFetchRequest) as [Photo]
             self.photoCount = self.pinPhotos.count
             self.photoCollectionView.reloadData()
         }
+        
     }
     
     fileprivate func createPhotoFetchRequest() -> NSFetchRequest<Photo> {
+        
         let fetchRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
         let predicate = NSPredicate(format: "pin == %@", currentPin)
         fetchRequest.predicate = predicate
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         return fetchRequest
+        
     }
     
     //function for loading images that are stored or that are being downloaded
     private func downloadImage(using cell: PhotoCell, photo: Photo, collectionView: UICollectionView, index: IndexPath) {
+        
         if let imageData = photo.photo {
             DispatchQueue.main.async {
                 cell.photoActivityIndicator.stopAnimating()
@@ -184,6 +196,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                 }
             }
         }
+        
     }
 
     
@@ -196,9 +209,11 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         photoCell.imageUrl = photo.fileName!
         
         downloadImage(using: photoCell, photo: photo, collectionView: collectionView, index: indexPath)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
         self.viewCount += 1
         DispatchQueue.main.async {
             if self.photoCount == 0 {
@@ -215,13 +230,16 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
             }
         }
         return self.photoCount
+        
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
         cell.backgroundColor = UIColor.white
         cell.photoActivityIndicator.startAnimating()
         return cell
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -60,8 +60,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
             alert.addAction(UIAlertAction(title:NSLocalizedString("Ok", comment: "Default Action"), style: .default))
             alert.message = "The fetch could not be performed: \(error.localizedDescription)"
             self.present(alert, animated: true, completion: nil)
-         }
-            //fatalError("The fetch could not be performed: \(error.localizedDescription)")
+            }
         }
     }
     
@@ -119,6 +118,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         }
             // When the array is complete, we add the annotations to the map.
             self.mapView.addAnnotations(annotations)
+      
     }
     
     // MARK: - MKMapViewDelegate
@@ -138,6 +138,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         }
         
         return pinView
+      
     }
     
     private var mapChangedFromUserInteraction = false
@@ -156,28 +157,35 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-        mapChangedFromUserInteraction = mapViewRegionDidChangeFromUserInteraction()
+
+      mapChangedFromUserInteraction = mapViewRegionDidChangeFromUserInteraction()
         if (mapChangedFromUserInteraction) {
             // user changed map region
             updateMapLocation()
         }
+      
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        if (mapChangedFromUserInteraction) {
+
+      if (mapChangedFromUserInteraction) {
             // user changed map region
             updateMapLocation()
         }
+      
     }
     
     func updateMapLocation() {
+      
         defaults.set(mapView.centerCoordinate.latitude, forKey: "MapLatitude")
         defaults.set(mapView.centerCoordinate.longitude, forKey: "MapLongitude")
         defaults.set(mapView.region.span.latitudeDelta, forKey: "MapLatitudeDelta")
         defaults.set(mapView.region.span.longitudeDelta, forKey: "MapLongitudeDelta")
+      
     }
 
     @objc func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+      
         if gestureRecognizer.state != UIGestureRecognizer.State.ended {
             return
         }
@@ -225,6 +233,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
     
     @objc func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+      
       // Get coordinates for selected pin
       let annotation = view.annotation as! MKPointAnnotation
       vtBBox = virtualTouristModel.shared.convertCoordToBBox(latLon: annotation.coordinate)
@@ -262,9 +271,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
          }
       }
    }
+   
 }
+
 extension MapViewController {
-    fileprivate func getPinName(coordinates: CLLocationCoordinate2D, completionHandler: @escaping (String?, Error?) -> ()) {
+
+   fileprivate func getPinName(coordinates: CLLocationCoordinate2D, completionHandler: @escaping (String?, Error?) -> ()) {
+      
         let pinLat: CLLocationDegrees = coordinates.latitude
         let pinLon: CLLocationDegrees = coordinates.longitude
         let pinLoc: CLLocation = CLLocation(latitude: pinLat, longitude: pinLon)
@@ -278,9 +291,11 @@ extension MapViewController {
                 completionHandler(" ", error)
             }
         })
+      
     }
 
     fileprivate func setupLongPressGestureRecognizer() {
+      
         // Set variables for detecting long press to drop pin
         let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.handleLongPress(_:)))
         lpgr.minimumPressDuration = 0.5
@@ -289,25 +304,29 @@ extension MapViewController {
         mapView.delegate = self
         mapView.isUserInteractionEnabled = true
         mapView.addGestureRecognizer(lpgr)
+      
     }
 
     fileprivate func setMapDefaults() {
+      
         // If not, set default center and map zoom level and save to defaults...
         defaults.set(true, forKey: "HasBeenOpenedBefore")
         defaults.set(Constants.MapStartingValues.mapLatitude, forKey: "MapLatitude")
         defaults.set(Constants.MapStartingValues.mapLongitude, forKey: "MapLongitude")
         defaults.set(Constants.MapStartingValues.mapLatitudeDelta, forKey: "MapLatitudeDelta")
         defaults.set(Constants.MapStartingValues.mapLongitudeDelta, forKey: "MapLongitudeDelta")
+      
     }
 
     fileprivate func setMapRegion() {
+      
         var mapRegion = MKCoordinateRegion(center: vtCoordinate, span: vtSpan)
         vtCoordinate = CLLocationCoordinate2D(latitude: defaults.double(forKey: "MapLatitude"), longitude: defaults.double(forKey: "MapLongitude"))
         mapRegion.center = vtCoordinate
         mapRegion.span.latitudeDelta = defaults.double(forKey: "MapLatitudeDelta")
         mapRegion.span.longitudeDelta = defaults.double(forKey: "MapLongitudeDelta")
         mapView.setRegion(mapRegion, animated: true)
+      
     }
-    
 
 }

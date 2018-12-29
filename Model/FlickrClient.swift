@@ -13,15 +13,14 @@ import MapKit
 extension virtualTouristModel  {
     func getFlickrPhotos(vtBBox: String, completionHandler: @escaping (_ success: Bool, _ errorString: String?, _ dataPhotos: [[String:Any]], _ photoCount: Int) -> Void){
         
-        let methodParameters: [String: String?] =
-            [Constants.FlickrParameterKeys.SafeSearch:Constants.FlickrParameterValues.UseSafeSearch,
+        let methodParameters: [String: String?] =            [Constants.FlickrParameterKeys.SafeSearch:Constants.FlickrParameterValues.UseSafeSearch,
              Constants.FlickrParameterKeys.BoundingBox:vtBBox,
-             Constants.FlickrParameterKeys.Per_Page:Constants.FlickrParameterValues.Per_Page,
-             Constants.FlickrParameterKeys.Extras:Constants.FlickrParameterValues.MediumURL,
-             Constants.FlickrParameterKeys.APIKey:Constants.FlickrParameterValues.APIKey,
-             Constants.FlickrParameterKeys.Method:Constants.FlickrParameterValues.SearchMethod,
-             Constants.FlickrParameterKeys.Format:Constants.FlickrParameterValues.ResponseFormat,
-             Constants.FlickrParameterKeys.NoJSONCallback:Constants.FlickrParameterValues.DisableJSONCallback]
+        Constants.FlickrParameterKeys.Per_Page:Constants.FlickrParameterValues.Per_Page,
+        Constants.FlickrParameterKeys.Extras:Constants.FlickrParameterValues.MediumURL,
+        Constants.FlickrParameterKeys.APIKey:Constants.FlickrParameterValues.APIKey,
+        Constants.FlickrParameterKeys.Method:Constants.FlickrParameterValues.SearchMethod,
+        Constants.FlickrParameterKeys.Format:Constants.FlickrParameterValues.ResponseFormat,
+        Constants.FlickrParameterKeys.NoJSONCallback:Constants.FlickrParameterValues.DisableJSONCallback]
 
         // create session and request
         let session = URLSession.shared
@@ -47,7 +46,6 @@ extension virtualTouristModel  {
                 completionHandler(false, "No Data was returned by this request!", [[:]], 0)
                 return
             }
-            
             
             // Deserialize JSON and extract necessary values
             let parsedResult: AnyObject!
@@ -151,7 +149,6 @@ extension virtualTouristModel  {
                     return
             }
             
-            
             guard let photosDictionary =
                 parsedResult[Constants.FlickrResponseKeys.Photos] as? [String: AnyObject] else {
                     completionHandler(false, "Cannot find key '\(Constants.FlickrResponseKeys.Photos)' in  \(String(describing: parsedResult))", [[:]], 0)
@@ -174,7 +171,6 @@ extension virtualTouristModel  {
                     let photoDictionary = photosArray[i] as [String:AnyObject]
                     let photoTitle = photoDictionary[Constants.FlickrResponseKeys.Title] as? String
                     
-
                     guard let imageURLString = photoDictionary[Constants.FlickrResponseKeys.MediumURL] as? String else {
                         completionHandler(false, "Cannot find key '\(Constants.FlickrResponseKeys.MediumURL)' in \(photoDictionary)", [[:]], 0)
                         return

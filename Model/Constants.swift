@@ -13,9 +13,9 @@ import MapKit
 
 struct Constants {
     
-    // MARK: Flickr
+    // MARK: - Flickr
     struct Flickr {
-        // MARK:  Secret
+        // MARK: - Secret
         static let Secret : String =
         "6dce7b392e0cfee3"
         static let APIScheme = "https"
@@ -30,7 +30,7 @@ struct Constants {
         static let maxPhotos = 21
     }
     
-    // MARK: Flickr Parameter Keys
+    // MARK: - Flickr Parameter Keys
     struct FlickrParameterKeys {
         static let Method = "method"
         static let APIKey = "api_key"
@@ -45,7 +45,7 @@ struct Constants {
         static let Per_Page = "per_page"
     }
     
-    // MARK: Flickr Parameter Values
+    // MARK: - Flickr Parameter Values
     struct FlickrParameterValues {
         static let SearchMethod = "flickr.photos.search"
         static let APIKey = "40711feae697263b6f0b3452fe6c0ca7"
@@ -57,7 +57,7 @@ struct Constants {
         static let Per_Page = "21"
     }
     
-    // MARK: Flickr Response Keys
+    // MARK: - Flickr Response Keys
     struct FlickrResponseKeys {
         static let Status = "stat"
         static let Photos = "photos"
@@ -68,11 +68,12 @@ struct Constants {
         static let Total = "total"
     }
     
-    // MARK: Flickr Response Values
+    // MARK: - Flickr Response Values
     struct FlickrResponseValues {
         static let OKStatus = "ok"
     }
     
+    // MARK: - Map Starting Values
     struct MapStartingValues {
         static let startingCoordinate = CLLocationCoordinate2D(latitude: 37.335743, longitude: -122.009389)
         static let startingSpan = MKCoordinateSpan.init(latitudeDelta: 0.1, longitudeDelta: 0.1)
@@ -81,4 +82,5 @@ struct Constants {
         static let mapLatitudeDelta = 0.2
         static let mapLongitudeDelta = 0.2
     }
+    
 }

@@ -9,12 +9,10 @@
 import UIKit
 
 class PhotoCell: UICollectionViewCell {
+    
     static let identifier = "photoCell"
     var imageUrl: String = ""
-    //@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var photoImage: UIImageView!
     @IBOutlet weak var photoActivityIndicator: UIActivityIndicatorView!
-    
-    
     
 }

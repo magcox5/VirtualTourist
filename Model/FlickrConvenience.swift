@@ -21,6 +21,7 @@ extension virtualTouristModel  {
         if (!isValueInRange(value: minLat, min: Double(Constants.Flickr.SearchLatRange.0), max: Double(Constants.Flickr.SearchLatRange.1))) {
             minLat = Double(Constants.Flickr.SearchLatRange.0)
         }
+        
         if (!isValueInRange(value: minLon, min: Double(Constants.Flickr.SearchLonRange.0), max: Double(Constants.Flickr.SearchLonRange.1))) {
             minLon = Double(Constants.Flickr.SearchLonRange.0)
         }
@@ -38,8 +39,6 @@ extension virtualTouristModel  {
     func isValueInRange(value: Double, min: Double, max: Double) -> Bool {
         return !(value < min || value > max)
     }
-    
-
 
 }
 
