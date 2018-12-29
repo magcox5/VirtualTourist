@@ -114,7 +114,7 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
 
     // MARK:  Functions
     fileprivate func getNewPhotos() {
- virtualTouristModel.sharedInstance().getFlickrPhotos(vtBBox: vtBBox) {(success, error, data, imageCount) in
+ virtualTouristModel.shared.getFlickrPhotos(vtBBox: vtBBox) {(success, error, data, imageCount) in
             if success {
                 DispatchQueue.main.async {
                     self.pinWithoutPhotos.isHidden = true

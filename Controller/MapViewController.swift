@@ -215,7 +215,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                   print("Just created a new pin: \(np)")
                   self.currentPin = np
          // Convert coordinates to a bbox string
-         self.vtBBox = virtualTouristModel.sharedInstance().convertCoordToBBox(latLon: newCoordinates)
+         self.vtBBox = virtualTouristModel.shared.convertCoordToBBox(latLon: newCoordinates)
          
          // Segue to collection view to display photos
          let controller = self.storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
@@ -235,7 +235,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
       let annotation = view.annotation as! MKPointAnnotation
       print("The latitude is: ", annotation.coordinate.latitude)
       print("The longitude is: ", annotation.coordinate.longitude)
-      vtBBox = virtualTouristModel.sharedInstance().convertCoordToBBox(latLon: annotation.coordinate)
+      vtBBox = virtualTouristModel.shared.convertCoordToBBox(latLon: annotation.coordinate)
       // Show photos for selected pin
         let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
         controller?.vtCoordinate = (view.annotation?.coordinate)!
