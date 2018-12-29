@@ -74,8 +74,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
 
         // Check to see if last map location saved
         if UserDefaults.standard.value(forKey: "HasBeenOpenedBefore") != nil {
-           // If so, do nothing...
-            print("Program has run before... recall last saved values")
+           // If so, then program has run before... recall last saved values
         } else {
             setMapDefaults()
         }
@@ -182,16 +181,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         if gestureRecognizer.state != UIGestureRecognizer.State.ended {
             return
         }
-        print("Long press on screen detected")
         // Add a pin at site of long press to the map
         let touchPoint = gestureRecognizer.location(in: mapView)
         let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-        print("The latitude is: ", newCoordinates.latitude)
-        print("The longitude is: ", newCoordinates.longitude)
         let annotation = MKPointAnnotation()
         annotation.coordinate = newCoordinates
         mapView.addAnnotation(annotation)
-        print("Annotation Added to the map")
 
         // Create a fetchrequest
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
@@ -212,7 +207,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                              startingPhotoNumber: 1,
                              context: fetchedResultsController.managedObjectContext)
                   try? self.dataController.viewContext.save()
-                  print("Just created a new pin: \(np)")
                   self.currentPin = np
          // Convert coordinates to a bbox string
          self.vtBBox = virtualTouristModel.shared.convertCoordToBBox(latLon: newCoordinates)
@@ -233,8 +227,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     @objc func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
       // Get coordinates for selected pin
       let annotation = view.annotation as! MKPointAnnotation
-      print("The latitude is: ", annotation.coordinate.latitude)
-      print("The longitude is: ", annotation.coordinate.longitude)
       vtBBox = virtualTouristModel.shared.convertCoordToBBox(latLon: annotation.coordinate)
       // Show photos for selected pin
         let controller = storyboard!.instantiateViewController(withIdentifier: "photoVC") as? PhotoCollectionViewController
@@ -301,7 +293,6 @@ extension MapViewController {
 
     fileprivate func setMapDefaults() {
         // If not, set default center and map zoom level and save to defaults...
-        print("Never run this program before... Set default values")
         defaults.set(true, forKey: "HasBeenOpenedBefore")
         defaults.set(Constants.MapStartingValues.mapLatitude, forKey: "MapLatitude")
         defaults.set(Constants.MapStartingValues.mapLongitude, forKey: "MapLongitude")
@@ -316,8 +307,6 @@ extension MapViewController {
         mapRegion.span.latitudeDelta = defaults.double(forKey: "MapLatitudeDelta")
         mapRegion.span.longitudeDelta = defaults.double(forKey: "MapLongitudeDelta")
         mapView.setRegion(mapRegion, animated: true)
-        print("Current span is: \(mapView.region.span)")
-        print("Current center is: \(mapView.region.center)")
     }
     
 

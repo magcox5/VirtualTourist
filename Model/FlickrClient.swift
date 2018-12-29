@@ -79,11 +79,7 @@ extension virtualTouristModel  {
                 // pick a random page!
                 let pageLimit = min(totalPages, 40)
                 let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
-                print("Here's my random page")
-                print(randomPage)
-                
                 self.displayImageFromFlickrBySearch(methodParameters: methodParameters as [String : AnyObject], withPageNumber: randomPage) {(success, error, data, photoCount) in
-                    
                     if success {
                         completionHandler(true, nil, data, photoCount)
                     }
@@ -96,12 +92,11 @@ extension virtualTouristModel  {
         }
         // start the task!
         task.resume()
-        
     }
 
     // MARK: Get Images from Random page
     private func displayImageFromFlickrBySearch(methodParameters:  [String:AnyObject], withPageNumber: Int, completionHandler: @escaping (_ success: Bool, _ errorString: String?, _ dataPhotos: [[String:Any]], _ photoCount: Int) -> Void) {
-        
+
         var methodParametersToPass: [String:AnyObject]
         methodParametersToPass = methodParameters
         
@@ -174,7 +169,6 @@ extension virtualTouristModel  {
                 return
             } else {
                 let photoIndex = photosArray.count
-                print("The photoIndex is:  ", photoIndex)
                 var dataPhotos: [[String:Any]] = [[:]]
                 for i in 0...photoIndex - 1 {
                     let photoDictionary = photosArray[i] as [String:AnyObject]

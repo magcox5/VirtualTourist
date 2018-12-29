@@ -65,7 +65,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
             //Delete photos in core data and collectionview, return message to "new collection"
             
             let selectedItems = self.photoCollectionView.indexPathsForSelectedItems?.sorted{$1 < $0}
-            print("The sorted order of the indices to delete is:  ", selectedItems!)
             for itemIndex in selectedItems! {
                 // 1st return cells to normal alpha
                     let cell = self.photoCollectionView.cellForItem(at: itemIndex)
@@ -73,12 +72,10 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                     cell?.contentView.alpha=1.0
                     // Delete item from pinPhotos array and core data
                     let itemToDelete = self.pinPhotos[itemIndex.row]
-                    print(itemToDelete.fileName! as Any)
                     self.pinPhotos.remove(at: itemIndex.row)
                     self.photoCount -= 1
                     self.dataController.viewContext.delete(itemToDelete)
             }
-            print("Number of photos now is:  ", photoCount)
             newOrDeleteCollection.title = bottomBarMessageNew
         }
         self.reloadPhotos()
@@ -217,7 +214,6 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
                 self.viewCount = 0
             }
         }
-        print("Number of photos to display:  ", self.photoCount, self.pinWithoutPhotos.isHidden, self.viewCount)
         return self.photoCount
     }
 
@@ -231,12 +227,10 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         let cell = collectionView.cellForItem(at: indexPath)
-        //let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCell
         cell?.alpha=0.5
         cell?.contentView.alpha=0.5
-    
-        print("Index paths for selected items is: ", self.photoCollectionView.indexPathsForSelectedItems!)
         newOrDeleteCollection.title = bottomBarMessageDelete
+
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -247,18 +241,17 @@ class PhotoCollectionViewController: UIViewController, UICollectionViewDelegate,
         // if no items are selected, change message back to original message
         if self.photoCollectionView!.indexPathsForSelectedItems == [] {
             newOrDeleteCollection.title = bottomBarMessageNew
-        } else {
-            print("Position of photos selected:  ", collectionView.indexPathsForSelectedItems!);
         }
         
     }
     
     //Set size of cells relative to the view size
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         let width = ((view.frame.width) - (3 * itemSpacing))/3
         let height = width
-        
         return CGSize(width: width, height: height)
+
     }
 
 }
