@@ -552,7 +552,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BHY3MQVSKT;
+				DEVELOPMENT_TEAM = 5QN3HTRJ7R;
 				INFOPLIST_FILE = VirtualTouristTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MagCoxSW.VirtualTouristTests;
@@ -569,7 +569,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BHY3MQVSKT;
+				DEVELOPMENT_TEAM = 5QN3HTRJ7R;
 				INFOPLIST_FILE = VirtualTouristTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MagCoxSW.VirtualTouristTests;
@@ -585,7 +585,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BHY3MQVSKT;
+				DEVELOPMENT_TEAM = 5QN3HTRJ7R;
 				INFOPLIST_FILE = VirtualTouristUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MagCoxSW.VirtualTouristUITests;
@@ -601,7 +601,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BHY3MQVSKT;
+				DEVELOPMENT_TEAM = 5QN3HTRJ7R;
 				INFOPLIST_FILE = VirtualTouristUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MagCoxSW.VirtualTouristUITests;
